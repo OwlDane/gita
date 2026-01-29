@@ -30,12 +30,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^2.4.9
   hive_flutter: ^1.1.0
   google_fonts: ^6.1.0
-  intl: ^0.18.1
+  intl: ^0.20.2
   uuid: ^4.2.1
   flutter_hooks: ^0.20.4
 

@@ -38,7 +38,7 @@ class EntryDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(entry.date),
+              DateFormat('EEEE, d MMMM yyyy', 'id').format(entry.date),
               style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 24),
             ),
             const SizedBox(height: 32),

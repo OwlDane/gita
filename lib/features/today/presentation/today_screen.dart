@@ -41,44 +41,51 @@ class TodayScreen extends ConsumerWidget {
               ),
             ),
           ),
-          SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                // Responsive width handling
-                final double horizontalPadding = constraints.maxWidth > AppBreakpoints.tablet 
-                    ? constraints.maxWidth * 0.2 
-                    : 24.0;
+          Positioned.fill(
+            child: SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Guard against unconstrained width
+                  final maxWidth = constraints.maxWidth.isInfinite 
+                      ? MediaQuery.of(context).size.width 
+                      : constraints.maxWidth;
+                  
+                  // Responsive width handling
+                  final double horizontalPadding = maxWidth > AppBreakpoints.tablet 
+                      ? maxWidth * 0.2 
+                      : 24.0;
 
-                return SingleChildScrollView(
-                  padding: EdgeInsets.fromLTRB(horizontalPadding, 32, horizontalPadding, 120),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const _AnimatedFadeIn(child: GreetingHeader()),
-                      const SizedBox(height: 32),
-                      const _AnimatedFadeIn(
-                        delay: Duration(milliseconds: 100),
-                        child: MoodCalendar(),
-                      ),
-                      const SizedBox(height: 48),
-                      const _AnimatedFadeIn(
-                        delay: Duration(milliseconds: 200),
-                        child: MoodSection(),
-                      ),
-                      const SizedBox(height: 48),
-                      const _AnimatedFadeIn(
-                        delay: Duration(milliseconds: 400),
-                        child: JournalInput(),
-                      ),
-                      const SizedBox(height: 40),
-                      const _AnimatedFadeIn(
-                        delay: Duration(milliseconds: 600),
-                        child: SaveButton(),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                  return SingleChildScrollView(
+                    padding: EdgeInsets.fromLTRB(horizontalPadding, 32, horizontalPadding, 120),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const _AnimatedFadeIn(child: GreetingHeader()),
+                        const SizedBox(height: 32),
+                        const _AnimatedFadeIn(
+                          delay: Duration(milliseconds: 100),
+                          child: MoodCalendar(),
+                        ),
+                        const SizedBox(height: 48),
+                        const _AnimatedFadeIn(
+                          delay: Duration(milliseconds: 200),
+                          child: MoodSection(),
+                        ),
+                        const SizedBox(height: 48),
+                        const _AnimatedFadeIn(
+                          delay: Duration(milliseconds: 400),
+                          child: JournalInput(),
+                        ),
+                        const SizedBox(height: 40),
+                        const _AnimatedFadeIn(
+                          delay: Duration(milliseconds: 600),
+                          child: SaveButton(),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],

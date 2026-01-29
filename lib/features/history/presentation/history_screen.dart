@@ -93,7 +93,7 @@ class _HistoryCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    DateFormat('EEEE, d MMMM', 'id_ID').format(entry.date),
+                    DateFormat('EEEE, d MMMM', 'id').format(entry.date),
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
