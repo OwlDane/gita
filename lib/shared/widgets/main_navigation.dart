@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../features/today/presentation/today_screen.dart';
-import '../../features/history/presentation/history_screen.dart';
-import '../../features/insights/presentation/insights_screen.dart'; // We'll create this placeholder
-import '../../core/theme/app_colors.dart';
+import 'package:gita/features/today/presentation/today_screen.dart';
+import 'package:gita/features/history/presentation/history_screen.dart';
+import 'package:gita/features/insights/presentation/insights_screen.dart';
+import 'package:gita/core/theme/app_colors.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});

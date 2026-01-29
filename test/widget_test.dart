@@ -8,23 +8,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('GitaApp smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    // Note: ProviderScope is handled inside GitaApp's main but for tests we might need it.
+    // Actually GitaApp doesn't include ProviderScope in its build method, it's in main().
+    await tester.pumpWidget(const ProviderScope(child: GitaApp()));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that our app starts with the greeting.
+    expect(find.textContaining('Selamat'), findsOneWidget);
   });
 }

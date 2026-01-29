@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/mood_entry.dart';
+import 'package:gita/features/today/data/mood_entry.dart';
 
 class MoodRepository {
   static const String boxName = 'mood_entries';

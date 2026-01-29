@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../data/mood_repository.dart';
-import '../../today/data/mood_entry.dart';
-import '../../../core/theme/app_colors.dart';
-import 'entry_detail_screen.dart';
+import 'package:gita/features/history/data/mood_repository.dart';
+import 'package:gita/features/today/data/mood_entry.dart';
+import 'package:gita/core/theme/app_colors.dart';
+import 'package:gita/features/history/presentation/entry_detail_screen.dart';
 
 class HistoryScreen extends ConsumerWidget {
   const HistoryScreen({super.key});

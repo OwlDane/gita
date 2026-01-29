@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'core/theme/app_theme.dart';
-import 'features/today/data/mood_entry.dart';
-import 'features/today/data/mood_entry.dart';
-import 'shared/widgets/main_navigation.dart';
+import 'package:gita/core/theme/app_theme.dart';
+import 'package:gita/features/today/data/mood_entry.dart';
+import 'package:gita/shared/widgets/main_navigation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../history/data/mood_repository.dart';
-import '../../today/data/mood_entry.dart';
+import 'package:gita/features/history/data/mood_repository.dart';
+import 'package:gita/features/today/data/mood_entry.dart';
 
 class InsightsData {
   final int streak;

@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'insights_provider.dart';
-import '../../today/data/mood_entry.dart';
-import '../../../core/theme/app_colors.dart';
+import 'package:gita/features/insights/presentation/insights_provider.dart';
+import 'package:gita/features/today/data/mood_entry.dart';
+import 'package:gita/core/theme/app_colors.dart';
 
 class InsightsScreen extends ConsumerWidget {
   const InsightsScreen({super.key});
