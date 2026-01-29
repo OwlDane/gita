@@ -94,13 +94,28 @@ class SaveButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(todayProvider);
-    final isEnabled = state.selectedMood != null;
+    final repo = ref.read(moodRepositoryProvider);
+    final isEnabled = state.selectedMood != null && !state.isSaving;
 
     return ElevatedButton(
-      onPressed: isEnabled ? () {
-        // Handle save action
+      onPressed: isEnabled ? () async {
+        await ref.read(todayProvider.notifier).saveEntry(repo);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Cerita kamu sudah tersimpan ✨'),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       } : null,
-      child: const Text('Simpan Cerita'),
+      child: state.isSaving 
+        ? const SizedBox(
+            height: 20, 
+            width: 20, 
+            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+          ) 
+        : const Text('Simpan Cerita'),
     );
   }
 }

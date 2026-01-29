@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'core/theme/app_theme.dart';
 import 'features/today/data/mood_entry.dart';
-import 'features/today/presentation/today_screen.dart';
+import 'features/today/data/mood_entry.dart';
+import 'shared/widgets/main_navigation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,7 @@ class GitaApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'GITA',
       theme: AppTheme.lightTheme,
-      home: const TodayScreen(),
+      home: const MainNavigation(),
     );
   }
 }

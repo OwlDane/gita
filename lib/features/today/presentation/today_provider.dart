@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../history/data/mood_repository.dart';
 import '../data/mood_entry.dart';
 
 class TodayState {
@@ -44,11 +45,26 @@ class TodayNotifier extends StateNotifier<TodayState> {
     state = state.copyWith(journalText: text);
   }
 
+  Future<void> saveEntry(MoodRepository repository) async {
+    if (state.selectedMood == null || state.isSaving) return;
+
+    state = state.copyWith(isSaving: true);
+
+    final entry = MoodEntry.create(
+      mood: state.selectedMood!,
+      intensity: state.intensity,
+      journal: state.journalText,
+    );
+
+    await repository.addEntry(entry);
+    
+    state = state.copyWith(isSaving: false);
+    reset();
+  }
+
   void reset() {
     state = TodayState();
   }
-
-  // Save logic will be added when Hive is fully integrated in Phase 3
 }
 
 final todayProvider = StateNotifierProvider<TodayNotifier, TodayState>((ref) {
