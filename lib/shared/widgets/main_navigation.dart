@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/features/today/presentation/today_screen.dart';
 import 'package:gita/features/history/presentation/history_screen.dart';
 import 'package:gita/features/insights/presentation/insights_screen.dart';
 import 'package:gita/core/theme/app_colors.dart';
+import 'package:gita/shared/providers/navigation_provider.dart';
 
-class MainNavigation extends StatefulWidget {
+class MainNavigation extends ConsumerWidget {
   const MainNavigation({super.key});
-
-  @override
-  State<MainNavigation> createState() => _MainNavigationState();
-}
-
-class _MainNavigationState extends State<MainNavigation> {
-  int _selectedIndex = 0;
 
   static const List<Widget> _screens = [
     TodayScreen(),
@@ -21,10 +16,12 @@ class _MainNavigationState extends State<MainNavigation> {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedIndex = ref.watch(navigationProvider);
+
     return Scaffold(
       body: IndexedStack(
-        index: _selectedIndex,
+        index: selectedIndex,
         children: _screens,
       ),
       bottomNavigationBar: Container(
@@ -35,7 +32,7 @@ class _MainNavigationState extends State<MainNavigation> {
           border: Border.all(color: AppColors.divider, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -44,16 +41,14 @@ class _MainNavigationState extends State<MainNavigation> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(32),
           child: BottomNavigationBar(
-            currentIndex: _selectedIndex,
+            currentIndex: selectedIndex,
             onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
+              ref.read(navigationProvider.notifier).state = index;
             },
             backgroundColor: Colors.transparent,
             elevation: 0,
             selectedItemColor: AppColors.primary,
-            unselectedItemColor: AppColors.textSecondary.withOpacity(0.4),
+            unselectedItemColor: AppColors.textSecondary.withValues(alpha: 0.4),
             showSelectedLabels: false,
             showUnselectedLabels: false,
             type: BottomNavigationBarType.fixed,

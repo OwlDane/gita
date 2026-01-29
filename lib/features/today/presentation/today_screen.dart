@@ -8,11 +8,25 @@ import 'package:gita/features/today/presentation/widgets/greeting_header.dart';
 import 'package:gita/features/today/presentation/widgets/mood_picker.dart';
 import 'package:gita/features/today/presentation/widgets/mood_calendar.dart';
 
-class TodayScreen extends ConsumerWidget {
+class TodayScreen extends ConsumerStatefulWidget {
   const TodayScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TodayScreen> createState() => _TodayScreenState();
+}
+
+class _TodayScreenState extends ConsumerState<TodayScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final repo = ref.read(moodRepositoryProvider);
+      ref.read(todayProvider.notifier).checkTodayEntry(repo);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
@@ -94,12 +108,40 @@ class TodayScreen extends ConsumerWidget {
   }
 }
 
-class JournalInput extends ConsumerWidget {
+class JournalInput extends ConsumerStatefulWidget {
   const JournalInput({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<JournalInput> createState() => _JournalInputState();
+}
+
+class _JournalInputState extends ConsumerState<JournalInput> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: ref.read(todayProvider).journalText);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final notifier = ref.read(todayProvider.notifier);
+
+    // Sync controller with state if state changes from outside (e.g. loadEntry)
+    ref.listen(todayProvider.select((s) => s.existingId), (prev, next) {
+      if (next != null && prev != next) {
+        _controller.text = ref.read(todayProvider).journalText;
+      } else if (next == null && prev != null) {
+        _controller.text = '';
+      }
+    });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,10 +155,11 @@ class JournalInput extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         TextField(
+          controller: _controller,
           maxLines: 6,
           decoration: InputDecoration(
             hintText: 'Tulis apa pun yang kamu rasain hari ini...',
-            hintStyle: TextStyle(color: AppColors.textSecondary.withOpacity(0.3)),
+            hintStyle: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.3)),
             filled: true,
             fillColor: AppColors.surface,
             border: OutlineInputBorder(
@@ -159,7 +202,7 @@ class SaveButton extends ConsumerWidget {
             width: 20, 
             child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
           ) 
-        : const Text('Simpan Cerita'),
+        : Text(state.existingId != null ? 'Perbarui Cerita' : 'Simpan Cerita'),
     );
   }
 }

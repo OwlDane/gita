@@ -93,7 +93,7 @@ class _CalendarItem extends StatelessWidget {
           width: 36,
           height: 36,
           decoration: BoxDecoration(
-            color: mood != null ? _getMoodColor(mood).withOpacity(0.2) : Colors.transparent,
+            color: mood != null ? _getMoodColor(mood).withValues(alpha: 0.2) : Colors.transparent,
             shape: BoxShape.circle,
             border: isToday ? Border.all(color: AppColors.primary, width: 2) : null,
           ),
@@ -103,7 +103,7 @@ class _CalendarItem extends StatelessWidget {
             : Text(
                 date.day.toString(),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: isToday ? AppColors.textMain : AppColors.textSecondary.withOpacity(0.5),
+                  color: isToday ? AppColors.textMain : AppColors.textSecondary.withValues(alpha: 0.5),
                   fontWeight: isToday ? FontWeight.w700 : FontWeight.w400,
                 ),
               ),

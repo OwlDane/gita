@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:gita/features/today/data/mood_entry.dart';
+import 'package:gita/features/today/presentation/today_provider.dart';
+import 'package:gita/shared/providers/navigation_provider.dart';
 import 'package:gita/core/theme/app_colors.dart';
 
-class EntryDetailScreen extends StatelessWidget {
+class EntryDetailScreen extends ConsumerWidget {
   final MoodEntry entry;
 
   const EntryDetailScreen({super.key, required this.entry});
@@ -27,10 +30,21 @@ class EntryDetailScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail Cerita'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_outlined),
+            onPressed: () {
+              ref.read(todayProvider.notifier).loadEntry(entry);
+              ref.read(navigationProvider.notifier).state = 0;
+              Navigator.pop(context);
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
