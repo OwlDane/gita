@@ -12,17 +12,17 @@ class AppTheme {
         primary: AppColors.midnightBlue,
         surface: AppColors.creamWhite,
       ),
-      textTheme: GoogleFonts.poppinsTextTheme().copyWith(
-        displayLarge: GoogleFonts.poppins(
+      textTheme: GoogleFonts.plusJakartaSansTextTheme().copyWith(
+        displayLarge: GoogleFonts.plusJakartaSans(
           fontSize: 32,
           fontWeight: FontWeight.w600,
           color: AppColors.textMain,
         ),
-        bodyLarge: GoogleFonts.poppins(
+        bodyLarge: GoogleFonts.plusJakartaSans(
           fontSize: 16,
           color: AppColors.textMain,
         ),
-        bodyMedium: GoogleFonts.poppins(
+        bodyMedium: GoogleFonts.plusJakartaSans(
           fontSize: 14,
           color: AppColors.textMain,
         ),
@@ -42,7 +42,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
-          textStyle: GoogleFonts.poppins(
+          textStyle: GoogleFonts.plusJakartaSans(
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
