@@ -25,21 +25,22 @@ class TodayScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const GreetingHeader(),
+                  const _AnimatedFadeIn(child: GreetingHeader()),
                   const SizedBox(height: 48),
-                  Text(
-                    'Gimana perasaan kamu hari ini?',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                        ),
+                  const _AnimatedFadeIn(
+                    delay: Duration(milliseconds: 200),
+                    child: MoodSection(),
                   ),
-                  const SizedBox(height: 24),
-                  const MoodPicker(),
                   const SizedBox(height: 48),
-                  const JournalInput(),
+                  const _AnimatedFadeIn(
+                    delay: Duration(milliseconds: 400),
+                    child: JournalInput(),
+                  ),
                   const SizedBox(height: 40),
-                  const SaveButton(),
+                  const _AnimatedFadeIn(
+                    delay: Duration(milliseconds: 600),
+                    child: SaveButton(),
+                  ),
                 ],
               ),
             );
@@ -116,6 +117,85 @@ class SaveButton extends ConsumerWidget {
             child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
           ) 
         : const Text('Simpan Cerita'),
+    );
+  }
+}
+
+class MoodSection extends StatelessWidget {
+  const MoodSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Gimana perasaan kamu hari ini?',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+        ),
+        const SizedBox(height: 24),
+        const MoodPicker(),
+      ],
+    );
+  }
+}
+
+class _AnimatedFadeIn extends StatefulWidget {
+  final Widget child;
+  final Duration delay;
+
+  const _AnimatedFadeIn({
+    required this.child,
+    this.delay = Duration.zero,
+  });
+
+  @override
+  State<_AnimatedFadeIn> createState() => _AnimatedFadeInState();
+}
+
+class _AnimatedFadeInState extends State<_AnimatedFadeIn> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacity;
+  late Animation<Offset> _slide;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _opacity = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    _slide = Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    );
+
+    Future.delayed(widget.delay, () {
+      if (mounted) _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _opacity,
+      child: SlideTransition(
+        position: _slide,
+        child: widget.child,
+      ),
     );
   }
 }
