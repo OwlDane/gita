@@ -76,7 +76,7 @@ class _CalendarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dayName = DateFormat('E', 'id_ID').format(date).substring(0, 1);
+    final dayName = DateFormat('E', 'id').format(date).substring(0, 1);
     
     return Column(
       mainAxisSize: MainAxisSize.min,

@@ -77,7 +77,7 @@ class _MoodItem extends StatelessWidget {
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 350),
-            curve: Curves.elasticOut,
+            curve: Curves.easeOutQuart,
             width: 72,
             height: 72,
             decoration: BoxDecoration(
@@ -87,15 +87,13 @@ class _MoodItem extends StatelessWidget {
                 color: isSelected ? color : AppColors.divider,
                 width: 2,
               ),
-              boxShadow: isSelected
-                  ? [
-                      BoxShadow(
-                        color: color.withOpacity(0.4),
-                        blurRadius: 20,
-                        spreadRadius: 2,
-                      )
-                    ]
-                  : [],
+              boxShadow: [
+                BoxShadow(
+                  color: color.withValues(alpha: isSelected ? 0.4 : 0.0),
+                  blurRadius: isSelected ? 20.0 : 0.0,
+                  spreadRadius: isSelected ? 2.0 : 0.0,
+                )
+              ],
             ),
             alignment: Alignment.center,
             child: Text(
