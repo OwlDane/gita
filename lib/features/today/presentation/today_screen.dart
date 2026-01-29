@@ -6,6 +6,7 @@ import 'package:gita/features/today/presentation/today_provider.dart';
 import 'package:gita/features/history/data/mood_repository.dart';
 import 'package:gita/features/today/presentation/widgets/greeting_header.dart';
 import 'package:gita/features/today/presentation/widgets/mood_picker.dart';
+import 'package:gita/features/today/presentation/widgets/mood_calendar.dart';
 
 class TodayScreen extends ConsumerWidget {
   const TodayScreen({super.key});
@@ -13,40 +14,74 @@ class TodayScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            // Responsive width handling
-            final double horizontalPadding = constraints.maxWidth > AppBreakpoints.tablet 
-                ? constraints.maxWidth * 0.2 
-                : 24.0;
-
-            return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 32),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const _AnimatedFadeIn(child: GreetingHeader()),
-                  const SizedBox(height: 48),
-                  const _AnimatedFadeIn(
-                    delay: Duration(milliseconds: 200),
-                    child: MoodSection(),
-                  ),
-                  const SizedBox(height: 48),
-                  const _AnimatedFadeIn(
-                    delay: Duration(milliseconds: 400),
-                    child: JournalInput(),
-                  ),
-                  const SizedBox(height: 40),
-                  const _AnimatedFadeIn(
-                    delay: Duration(milliseconds: 600),
-                    child: SaveButton(),
-                  ),
-                ],
+      body: Stack(
+        children: [
+          // Background Decorative Blobs
+          Positioned(
+            top: -100,
+            right: -50,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.primary.withOpacity(0.05),
               ),
-            );
-          },
-        ),
+            ),
+          ),
+          Positioned(
+            bottom: 200,
+            left: -100,
+            child: Container(
+              width: 250,
+              height: 250,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.moodSedih.withOpacity(0.03),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Responsive width handling
+                final double horizontalPadding = constraints.maxWidth > AppBreakpoints.tablet 
+                    ? constraints.maxWidth * 0.2 
+                    : 24.0;
+
+                return SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(horizontalPadding, 32, horizontalPadding, 120),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const _AnimatedFadeIn(child: GreetingHeader()),
+                      const SizedBox(height: 32),
+                      const _AnimatedFadeIn(
+                        delay: Duration(milliseconds: 100),
+                        child: MoodCalendar(),
+                      ),
+                      const SizedBox(height: 48),
+                      const _AnimatedFadeIn(
+                        delay: Duration(milliseconds: 200),
+                        child: MoodSection(),
+                      ),
+                      const SizedBox(height: 48),
+                      const _AnimatedFadeIn(
+                        delay: Duration(milliseconds: 400),
+                        child: JournalInput(),
+                      ),
+                      const SizedBox(height: 40),
+                      const _AnimatedFadeIn(
+                        delay: Duration(milliseconds: 600),
+                        child: SaveButton(),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -74,9 +109,9 @@ class JournalInput extends ConsumerWidget {
           maxLines: 6,
           decoration: InputDecoration(
             hintText: 'Tulis apa pun yang kamu rasain hari ini...',
-            hintStyle: TextStyle(color: AppColors.textSecondary.withOpacity(0.5)),
+            hintStyle: TextStyle(color: AppColors.textSecondary.withOpacity(0.3)),
             filled: true,
-            fillColor: AppColors.creamWhite,
+            fillColor: AppColors.surface,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
               borderSide: BorderSide.none,
@@ -132,13 +167,80 @@ class MoodSection extends StatelessWidget {
       children: [
         Text(
           'Gimana perasaan kamu hari ini?',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
+          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                fontSize: 20,
               ),
         ),
         const SizedBox(height: 24),
         const MoodPicker(),
+        const SizedBox(height: 48),
+        const IntensitySection(),
+      ],
+    );
+  }
+}
+
+class IntensitySection extends ConsumerWidget {
+  const IntensitySection({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final intensity = ref.watch(todayProvider).intensity;
+    final notifier = ref.read(todayProvider.notifier);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Seberapa intens rasanya?',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+            Text(
+              '$intensity/5',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w800,
+                  ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            activeTrackColor: AppColors.primary,
+            inactiveTrackColor: AppColors.surface,
+            thumbColor: AppColors.primary,
+            overlayColor: AppColors.primary.withOpacity(0.2),
+            trackHeight: 12,
+            thumbShape: const RoundSliderThumbShape(
+              enabledThumbRadius: 12,
+              elevation: 4,
+            ),
+            trackShape: const RoundedRectSliderTrackShape(),
+          ),
+          child: Slider(
+            value: intensity.toDouble(),
+            min: 1,
+            max: 5,
+            divisions: 4,
+            onChanged: (value) => notifier.updateIntensity(value.toInt()),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Biasa aja', style: Theme.of(context).textTheme.labelSmall),
+              Text('Banget!', style: Theme.of(context).textTheme.labelSmall),
+            ],
+          ),
+        ),
       ],
     );
   }

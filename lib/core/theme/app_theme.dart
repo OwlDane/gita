@@ -6,15 +6,22 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: AppColors.surfaceWhite,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.midnightBlue,
-        primary: AppColors.midnightBlue,
-        surface: AppColors.creamWhite,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: AppColors.background,
+      colorScheme: const ColorScheme.dark(
+        primary: AppColors.primary,
+        surface: AppColors.surface,
+        onSurface: AppColors.textMain,
       ),
       textTheme: GoogleFonts.plusJakartaSansTextTheme().copyWith(
         displayLarge: GoogleFonts.plusJakartaSans(
           fontSize: 32,
+          fontWeight: FontWeight.w700,
+          color: AppColors.textMain,
+          letterSpacing: -0.5,
+        ),
+        displayMedium: GoogleFonts.plusJakartaSans(
+          fontSize: 24,
           fontWeight: FontWeight.w600,
           color: AppColors.textMain,
         ),
@@ -24,29 +31,41 @@ class AppTheme {
         ),
         bodyMedium: GoogleFonts.plusJakartaSans(
           fontSize: 14,
-          color: AppColors.textMain,
+          color: AppColors.textSecondary,
+        ),
+        labelLarge: GoogleFonts.plusJakartaSans(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textSecondary,
+          letterSpacing: 1.2,
         ),
       ),
       cardTheme: CardThemeData(
-        color: AppColors.creamWhite,
+        color: AppColors.surface,
         elevation: 0,
+        margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(28),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.midnightBlue,
-          foregroundColor: Colors.white,
-          minimumSize: const Size(double.infinity, 56),
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.black,
+          minimumSize: const Size(double.infinity, 60),
+          elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(20),
           ),
           textStyle: GoogleFonts.plusJakartaSans(
             fontSize: 16,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
+      ),
+      dividerTheme: const DividerThemeData(
+        color: AppColors.divider,
+        thickness: 1,
       ),
     );
   }

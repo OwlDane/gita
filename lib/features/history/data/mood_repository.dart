@@ -24,6 +24,18 @@ class MoodRepository {
     await box.delete(id);
   }
 
+  MoodEntry? getEntryByDate(DateTime date) {
+    final box = Hive.box<MoodEntry>(boxName);
+    final normalizedDate = DateTime(date.year, date.month, date.day);
+    try {
+      return box.values.firstWhere(
+        (e) => DateTime(e.date.year, e.date.month, e.date.day).isAtSameMomentAs(normalizedDate),
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
   Stream<List<MoodEntry>> watchEntries() {
     final box = Hive.box<MoodEntry>(boxName);
     return box.watch().map((_) => getAllEntries());

@@ -68,8 +68,9 @@ class _HistoryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppColors.creamWhite,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.divider, width: 1),
         ),
         child: Row(
           children: [
@@ -77,7 +78,7 @@ class _HistoryCard extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: AppColors.surfaceWhite,
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(16),
               ),
               alignment: Alignment.center,

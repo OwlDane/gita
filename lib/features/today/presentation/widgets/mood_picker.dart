@@ -26,7 +26,7 @@ class MoodPicker extends ConsumerWidget {
         _MoodItem(
           mood: MoodType.biasaAja,
           emoji: '😐',
-          label: 'Biasa Aja',
+          label: 'Biasa',
           color: AppColors.moodBiasaAja,
           isSelected: selectedMood == MoodType.biasaAja,
           onTap: () => notifier.selectMood(MoodType.biasaAja),
@@ -42,7 +42,7 @@ class MoodPicker extends ConsumerWidget {
         _MoodItem(
           mood: MoodType.sangatSenang,
           emoji: '😄',
-          label: 'Sangat Senang',
+          label: 'Sangat',
           color: AppColors.moodSangatSenang,
           isSelected: selectedMood == MoodType.sangatSenang,
           onTap: () => notifier.selectMood(MoodType.sangatSenang),
@@ -76,19 +76,23 @@ class _MoodItem extends StatelessWidget {
       child: Column(
         children: [
           AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            width: isSelected ? 72 : 64,
-            height: isSelected ? 72 : 64,
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.elasticOut,
+            width: 72,
+            height: 72,
             decoration: BoxDecoration(
-              color: isSelected ? color : color.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(24),
+              color: isSelected ? color : AppColors.surface,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: isSelected ? color : AppColors.divider,
+                width: 2,
+              ),
               boxShadow: isSelected
                   ? [
                       BoxShadow(
                         color: color.withOpacity(0.4),
-                        blurRadius: 15,
-                        offset: const Offset(0, 8),
+                        blurRadius: 20,
+                        spreadRadius: 2,
                       )
                     ]
                   : [],
@@ -96,17 +100,17 @@ class _MoodItem extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               emoji,
-              style: TextStyle(fontSize: isSelected ? 38 : 32),
+              style: TextStyle(fontSize: isSelected ? 36 : 30),
             ),
           ),
           const SizedBox(height: 12),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              color: isSelected ? AppColors.textMain : AppColors.textSecondary,
-            ),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: isSelected ? AppColors.textMain : AppColors.textSecondary,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  fontSize: 12,
+                ),
           ),
         ],
       ),

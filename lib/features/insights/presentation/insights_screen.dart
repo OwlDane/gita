@@ -108,11 +108,12 @@ class _StreakCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.midnightBlue,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: AppColors.divider, width: 1),
         boxShadow: [
           BoxShadow(
-            color: AppColors.midnightBlue.withOpacity(0.3),
+            color: Colors.black.withOpacity(0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -131,16 +132,17 @@ class _StreakCard extends StatelessWidget {
               Text(
                 '$streak Hari',
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textMain,
                   fontSize: 32,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
               const Text(
                 'Streak Menulismu',
                 style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
+                  color: AppColors.textSecondary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -194,7 +196,7 @@ class _MoodDistributionBar extends StatelessWidget {
             child: LinearProgressIndicator(
               value: percentage,
               minHeight: 12,
-              backgroundColor: AppColors.surfaceWhite,
+              backgroundColor: AppColors.background,
               valueColor: AlwaysStoppedAnimation<Color>(color),
             ),
           ),
@@ -215,8 +217,9 @@ class _MostFrequentCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.creamWhite,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: AppColors.divider, width: 1),
       ),
       child: Row(
         children: [

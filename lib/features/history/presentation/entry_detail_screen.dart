@@ -45,8 +45,9 @@ class EntryDetailScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: AppColors.creamWhite,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(32),
+                border: Border.all(color: AppColors.divider, width: 1),
               ),
               child: Row(
                 children: [

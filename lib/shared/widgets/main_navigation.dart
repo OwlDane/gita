@@ -28,45 +28,53 @@ class _MainNavigationState extends State<MainNavigation> {
         children: _screens,
       ),
       bottomNavigationBar: Container(
+        margin: const EdgeInsets.fromLTRB(24, 0, 24, 32),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(32),
+          border: Border.all(color: AppColors.divider, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
             ),
           ],
         ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-          selectedItemColor: AppColors.midnightBlue,
-          unselectedItemColor: AppColors.textSecondary,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.today_outlined),
-              activeIcon: Icon(Icons.today),
-              label: 'Hari Ini',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history_outlined),
-              activeIcon: Icon(Icons.history),
-              label: 'Riwayat',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_outlined),
-              activeIcon: Icon(Icons.bar_chart),
-              label: 'Wawasan',
-            ),
-          ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(32),
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            selectedItemColor: AppColors.primary,
+            unselectedItemColor: AppColors.textSecondary.withOpacity(0.4),
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            type: BottomNavigationBarType.fixed,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.grid_view_rounded, size: 24),
+                activeIcon: Icon(Icons.grid_view_rounded, size: 24),
+                label: 'Today',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_today_rounded, size: 22),
+                activeIcon: Icon(Icons.calendar_today_rounded, size: 22),
+                label: 'History',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.analytics_outlined, size: 24),
+                activeIcon: Icon(Icons.analytics_rounded, size: 24),
+                label: 'Insights',
+              ),
+            ],
+          ),
         ),
       ),
     );

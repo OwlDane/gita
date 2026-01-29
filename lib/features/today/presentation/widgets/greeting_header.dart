@@ -5,31 +5,61 @@ import 'package:gita/core/theme/app_colors.dart';
 class GreetingHeader extends StatelessWidget {
   const GreetingHeader({super.key});
 
-  String _getGreeting() {
-    final hour = DateTime.now().hour;
-    if (hour < 12) return 'Selamat pagi';
-    if (hour < 15) return 'Selamat siang';
-    if (hour < 18) return 'Selamat sore';
-    return 'Selamat malam';
-  }
-
   @override
   Widget build(BuildContext context) {
-    final dateStr = DateFormat('EEEE, d MMMM', 'id_ID').format(DateTime.now());
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          _getGreeting(),
-          style: Theme.of(context).textTheme.displayLarge,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          dateStr,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
+        Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.divider, width: 1),
               ),
+              child: const Center(
+                child: Text(
+                  '👤',
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Halo, User',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+                Text(
+                  'emote CARE',
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: AppColors.primary,
+                        fontSize: 10,
+                      ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.divider, width: 1),
+          ),
+          child: const Icon(
+            Icons.notifications_none_rounded,
+            color: AppColors.textMain,
+            size: 20,
+          ),
         ),
       ],
     );
