@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/core/constants/breakpoints.dart';
+import 'package:gita/features/today/data/mood_entry.dart';
 import 'package:gita/core/theme/app_colors.dart';
 import 'package:gita/features/today/presentation/today_provider.dart';
 import 'package:gita/features/history/data/mood_repository.dart';
 import 'package:gita/features/today/presentation/widgets/greeting_header.dart';
 import 'package:gita/features/today/presentation/widgets/mood_picker.dart';
 import 'package:gita/features/today/presentation/widgets/mood_calendar.dart';
+import 'package:gita/features/today/presentation/widgets/intensity_picker.dart';
 
 class TodayScreen extends ConsumerStatefulWidget {
   const TodayScreen({super.key});
@@ -207,11 +209,11 @@ class SaveButton extends ConsumerWidget {
   }
 }
 
-class MoodSection extends StatelessWidget {
+class MoodSection extends ConsumerWidget {
   const MoodSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -222,7 +224,10 @@ class MoodSection extends StatelessWidget {
               ),
         ),
         const SizedBox(height: 24),
-        const MoodPicker(),
+        MoodPicker(
+          selectedMood: ref.watch(todayProvider).selectedMood,
+          onSelect: ref.read(todayProvider.notifier).selectMood,
+        ),
         const SizedBox(height: 48),
         const IntensitySection(),
       ],
@@ -238,60 +243,9 @@ class IntensitySection extends ConsumerWidget {
     final intensity = ref.watch(todayProvider).intensity;
     final notifier = ref.read(todayProvider.notifier);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Seberapa intens rasanya?',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-            ),
-            Text(
-              '$intensity/5',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w800,
-                  ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
-        SliderTheme(
-          data: SliderTheme.of(context).copyWith(
-            activeTrackColor: AppColors.primary,
-            inactiveTrackColor: AppColors.surface,
-            thumbColor: AppColors.primary,
-            overlayColor: AppColors.primary.withOpacity(0.2),
-            trackHeight: 12,
-            thumbShape: const RoundSliderThumbShape(
-              enabledThumbRadius: 12,
-              elevation: 4,
-            ),
-            trackShape: const RoundedRectSliderTrackShape(),
-          ),
-          child: Slider(
-            value: intensity.toDouble(),
-            min: 1,
-            max: 5,
-            divisions: 4,
-            onChanged: (value) => notifier.updateIntensity(value.toInt()),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Biasa aja', style: Theme.of(context).textTheme.labelSmall),
-              Text('Banget!', style: Theme.of(context).textTheme.labelSmall),
-            ],
-          ),
-        ),
-      ],
+    return IntensityPicker(
+      intensity: intensity,
+      onChanged: notifier.updateIntensity,
     );
   }
 }

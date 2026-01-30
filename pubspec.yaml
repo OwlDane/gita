@@ -40,6 +40,7 @@ dependencies:
   intl: ^0.20.2
   uuid: ^4.2.1
   flutter_hooks: ^0.20.4
+  table_calendar: ^3.2.0
 
 dev_dependencies:
   flutter_test:
