@@ -45,12 +45,12 @@ class _HistoryCard extends StatelessWidget {
 
   const _HistoryCard({required this.entry});
 
-  String _getEmoji(MoodType type) {
+  String _getMoodIcon(MoodType type) {
     switch (type) {
-      case MoodType.sedih: return '😞';
-      case MoodType.biasaAja: return '😐';
-      case MoodType.senang: return '🙂';
-      case MoodType.sangatSenang: return '😄';
+      case MoodType.sedih: return 'assets/icons/3.png';
+      case MoodType.biasa: return 'assets/icons/2.png';
+      case MoodType.senang: return 'assets/icons/4.png';
+      case MoodType.marah: return 'assets/icons/1.png';
     }
   }
 
@@ -82,9 +82,10 @@ class _HistoryCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               alignment: Alignment.center,
-              child: Text(
-                _getEmoji(entry.mood),
-                style: const TextStyle(fontSize: 28),
+              child: Image.asset(
+                _getMoodIcon(entry.mood),
+                width: 32,
+                height: 32,
               ),
             ),
             const SizedBox(width: 16),
@@ -129,11 +130,6 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            '☁️',
-            style: TextStyle(fontSize: 64),
-          ),
-          const SizedBox(height: 16),
           Text(
             'Belum ada cerita hari ini.',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(

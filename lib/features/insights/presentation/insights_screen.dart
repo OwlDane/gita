@@ -7,21 +7,21 @@ import 'package:gita/core/theme/app_colors.dart';
 class InsightsScreen extends ConsumerWidget {
   const InsightsScreen({super.key});
 
-  String _getEmoji(MoodType type) {
+  String _getMoodIcon(MoodType type) {
     switch (type) {
-      case MoodType.sedih: return '😞';
-      case MoodType.biasaAja: return '😐';
-      case MoodType.senang: return '🙂';
-      case MoodType.sangatSenang: return '😄';
+      case MoodType.sedih: return 'assets/icons/3.png';
+      case MoodType.biasa: return 'assets/icons/2.png';
+      case MoodType.senang: return 'assets/icons/4.png';
+      case MoodType.marah: return 'assets/icons/1.png';
     }
   }
 
   String _getMoodLabel(MoodType type) {
     switch (type) {
       case MoodType.sedih: return 'Sedih';
-      case MoodType.biasaAja: return 'Biasa Aja';
+      case MoodType.biasa: return 'Biasa';
       case MoodType.senang: return 'Senang';
-      case MoodType.sangatSenang: return 'Sangat Senang';
+      case MoodType.marah: return 'Marah';
     }
   }
 
@@ -66,7 +66,7 @@ class InsightsScreen extends ConsumerWidget {
                   delay: Duration(milliseconds: 300 + (index * 100)),
                   child: _MoodDistributionBar(
                     mood: _getMoodLabel(mood),
-                    emoji: _getEmoji(mood),
+                    iconPath: _getMoodIcon(mood),
                     percentage: percentage,
                     count: count,
                     color: _getMoodColor(mood),
@@ -79,7 +79,7 @@ class InsightsScreen extends ConsumerWidget {
                 delay: const Duration(milliseconds: 800),
                 child: _MostFrequentCard(
                   mood: _getMoodLabel(insights.mostFrequentMood!),
-                  emoji: _getEmoji(insights.mostFrequentMood!),
+                  iconPath: _getMoodIcon(insights.mostFrequentMood!),
                 ),
               ),
           ],
@@ -91,9 +91,9 @@ class InsightsScreen extends ConsumerWidget {
   Color _getMoodColor(MoodType mood) {
     switch (mood) {
       case MoodType.sedih: return AppColors.moodSedih;
-      case MoodType.biasaAja: return AppColors.moodBiasaAja;
+      case MoodType.biasa: return AppColors.moodBiasa;
       case MoodType.senang: return AppColors.moodSenang;
-      case MoodType.sangatSenang: return AppColors.moodSangatSenang;
+      case MoodType.marah: return AppColors.moodMarah;
     }
   }
 }
@@ -155,14 +155,14 @@ class _StreakCard extends StatelessWidget {
 
 class _MoodDistributionBar extends StatelessWidget {
   final String mood;
-  final String emoji;
+  final String iconPath;
   final double percentage;
   final int count;
   final Color color;
 
   const _MoodDistributionBar({
     required this.mood,
-    required this.emoji,
+    required this.iconPath,
     required this.percentage,
     required this.count,
     required this.color,
@@ -176,7 +176,7 @@ class _MoodDistributionBar extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 20)),
+              Image.asset(iconPath, width: 20, height: 20),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
@@ -208,9 +208,9 @@ class _MoodDistributionBar extends StatelessWidget {
 
 class _MostFrequentCard extends StatelessWidget {
   final String mood;
-  final String emoji;
+  final String iconPath;
 
-  const _MostFrequentCard({required this.mood, required this.emoji});
+  const _MostFrequentCard({required this.mood, required this.iconPath});
 
   @override
   Widget build(BuildContext context) {
@@ -245,7 +245,7 @@ class _MostFrequentCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          Text(emoji, style: const TextStyle(fontSize: 40)),
+          Image.asset(iconPath, width: 48, height: 48),
         ],
       ),
     );

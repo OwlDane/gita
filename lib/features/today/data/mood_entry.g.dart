@@ -65,11 +65,11 @@ class MoodTypeAdapter extends TypeAdapter<MoodType> {
       case 0:
         return MoodType.sedih;
       case 1:
-        return MoodType.biasaAja;
+        return MoodType.biasa;
       case 2:
         return MoodType.senang;
       case 3:
-        return MoodType.sangatSenang;
+        return MoodType.marah;
       default:
         return MoodType.sedih;
     }
@@ -81,13 +81,13 @@ class MoodTypeAdapter extends TypeAdapter<MoodType> {
       case MoodType.sedih:
         writer.writeByte(0);
         break;
-      case MoodType.biasaAja:
+      case MoodType.biasa:
         writer.writeByte(1);
         break;
       case MoodType.senang:
         writer.writeByte(2);
         break;
-      case MoodType.sangatSenang:
+      case MoodType.marah:
         writer.writeByte(3);
         break;
     }

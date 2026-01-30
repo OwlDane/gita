@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gita/core/theme/app_theme.dart';
 import 'package:gita/features/today/data/mood_entry.dart';
-import 'package:gita/shared/widgets/main_navigation.dart';
+import 'package:gita/shared/widgets/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,7 +52,7 @@ class GitaApp extends StatelessWidget {
         Locale('id'),
       ],
       locale: const Locale('id', 'ID'),
-      home: const MainNavigation(),
+      home: const SplashScreen(),
     );
   }
 }

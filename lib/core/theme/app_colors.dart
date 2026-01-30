@@ -8,9 +8,9 @@ class AppColors {
   
   // Mood Accent Colors (Rich & Vibrant)
   static const Color moodSedih = Color(0xFF64D2FF); // Sky Blue
-  static const Color moodBiasaAja = Color(0xFFAEAEB2); // Muted Silver
+  static const Color moodBiasa = Color(0xFFAEAEB2); // Muted Silver
   static const Color moodSenang = Color(0xFFFFD60A); // Gold/Yellow
-  static const Color moodSangatSenang = Color(0xFFFF375F); // Rose/Pink
+  static const Color moodMarah = Color(0xFFFF453A); // Vibrant Red
 
   // Neutral Colors
   static const Color textMain = Color(0xFFFFFFFF);

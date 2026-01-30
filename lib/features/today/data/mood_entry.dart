@@ -8,11 +8,11 @@ enum MoodType {
   @HiveField(0)
   sedih,
   @HiveField(1)
-  biasaAja,
+  biasa,
   @HiveField(2)
   senang,
   @HiveField(3)
-  sangatSenang,
+  marah,
 }
 
 @HiveType(typeId: 1)

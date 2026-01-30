@@ -33,21 +33,21 @@ class _EntryDetailScreenState extends ConsumerState<EntryDetailScreen> {
     super.dispose();
   }
 
-  String _getEmoji(MoodType type) {
+  String _getMoodIcon(MoodType type) {
     switch (type) {
-      case MoodType.sedih: return '😞';
-      case MoodType.biasaAja: return '😐';
-      case MoodType.senang: return '🙂';
-      case MoodType.sangatSenang: return '😄';
+      case MoodType.sedih: return 'assets/icons/3.png';
+      case MoodType.biasa: return 'assets/icons/2.png';
+      case MoodType.senang: return 'assets/icons/4.png';
+      case MoodType.marah: return 'assets/icons/1.png';
     }
   }
 
   String _getMoodLabel(MoodType type) {
     switch (type) {
       case MoodType.sedih: return 'Sedih';
-      case MoodType.biasaAja: return 'Biasa Aja';
+      case MoodType.biasa: return 'Biasa';
       case MoodType.senang: return 'Senang';
-      case MoodType.sangatSenang: return 'Sangat Senang';
+      case MoodType.marah: return 'Marah';
     }
   }
 
@@ -174,9 +174,10 @@ class _EntryDetailScreenState extends ConsumerState<EntryDetailScreen> {
                 ),
                 child: Row(
                   children: [
-                    Text(
-                      _getEmoji(widget.entry.mood),
-                      style: const TextStyle(fontSize: 48),
+                    Image.asset(
+                      _getMoodIcon(widget.entry.mood),
+                      width: 56,
+                      height: 56,
                     ),
                     const SizedBox(width: 24),
                     Column(

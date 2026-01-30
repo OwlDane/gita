@@ -19,35 +19,35 @@ class MoodPicker extends StatelessWidget {
       children: [
         _MoodItem(
           mood: MoodType.sedih,
-          emoji: '😞',
+          iconPath: 'assets/icons/3.png',
           label: 'Sedih',
           color: AppColors.moodSedih,
           isSelected: selectedMood == MoodType.sedih,
           onTap: () => onSelect(MoodType.sedih),
         ),
         _MoodItem(
-          mood: MoodType.biasaAja,
-          emoji: '😐',
+          mood: MoodType.biasa,
+          iconPath: 'assets/icons/2.png',
           label: 'Biasa',
-          color: AppColors.moodBiasaAja,
-          isSelected: selectedMood == MoodType.biasaAja,
-          onTap: () => onSelect(MoodType.biasaAja),
+          color: AppColors.moodBiasa,
+          isSelected: selectedMood == MoodType.biasa,
+          onTap: () => onSelect(MoodType.biasa),
         ),
         _MoodItem(
           mood: MoodType.senang,
-          emoji: '🙂',
+          iconPath: 'assets/icons/4.png',
           label: 'Senang',
           color: AppColors.moodSenang,
           isSelected: selectedMood == MoodType.senang,
           onTap: () => onSelect(MoodType.senang),
         ),
         _MoodItem(
-          mood: MoodType.sangatSenang,
-          emoji: '😄',
-          label: 'Sangat',
-          color: AppColors.moodSangatSenang,
-          isSelected: selectedMood == MoodType.sangatSenang,
-          onTap: () => onSelect(MoodType.sangatSenang),
+          mood: MoodType.marah,
+          iconPath: 'assets/icons/1.png',
+          label: 'Marah',
+          color: AppColors.moodMarah,
+          isSelected: selectedMood == MoodType.marah,
+          onTap: () => onSelect(MoodType.marah),
         ),
       ],
     );
@@ -56,7 +56,7 @@ class MoodPicker extends StatelessWidget {
 
 class _MoodItem extends StatelessWidget {
   final MoodType mood;
-  final String emoji;
+  final String iconPath;
   final String label;
   final Color color;
   final bool isSelected;
@@ -64,7 +64,7 @@ class _MoodItem extends StatelessWidget {
 
   const _MoodItem({
     required this.mood,
-    required this.emoji,
+    required this.iconPath,
     required this.label,
     required this.color,
     required this.isSelected,
@@ -98,9 +98,10 @@ class _MoodItem extends StatelessWidget {
               ],
             ),
             alignment: Alignment.center,
-            child: Text(
-              emoji,
-              style: TextStyle(fontSize: isSelected ? 36 : 30),
+            child: Image.asset(
+              iconPath,
+              width: isSelected ? 48 : 42,
+              height: isSelected ? 48 : 42,
             ),
           ),
           const SizedBox(height: 12),

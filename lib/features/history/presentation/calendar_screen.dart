@@ -18,21 +18,21 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  String _getEmoji(MoodType type) {
+  String _getMoodIcon(MoodType type) {
     switch (type) {
-      case MoodType.sedih: return '😞';
-      case MoodType.biasaAja: return '😐';
-      case MoodType.senang: return '🙂';
-      case MoodType.sangatSenang: return '😄';
+      case MoodType.sedih: return 'assets/icons/3.png';
+      case MoodType.biasa: return 'assets/icons/2.png';
+      case MoodType.senang: return 'assets/icons/4.png';
+      case MoodType.marah: return 'assets/icons/1.png';
     }
   }
 
   Color _getMoodColor(MoodType type) {
     switch (type) {
       case MoodType.sedih: return AppColors.moodSedih;
-      case MoodType.biasaAja: return AppColors.moodBiasaAja;
+      case MoodType.biasa: return AppColors.moodBiasa;
       case MoodType.senang: return AppColors.moodSenang;
-      case MoodType.sangatSenang: return AppColors.moodSangatSenang;
+      case MoodType.marah: return AppColors.moodMarah;
     }
   }
 
@@ -135,7 +135,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Text(_getEmoji(mood)),
+                  Image.asset(_getMoodIcon(mood), width: 16, height: 16),
                   const SizedBox(width: 4),
                   Text(
                     _getMoodLabel(mood),
@@ -153,9 +153,9 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   String _getMoodLabel(MoodType type) {
     switch (type) {
       case MoodType.sedih: return 'Sedih';
-      case MoodType.biasaAja: return 'Biasa';
+      case MoodType.biasa: return 'Biasa';
       case MoodType.senang: return 'Senang';
-      case MoodType.sangatSenang: return 'Sangat';
+      case MoodType.marah: return 'Marah';
     }
   }
 }
@@ -179,9 +179,9 @@ class _CalendarDay extends StatelessWidget {
     if (mood != null) {
       switch (mood!) {
         case MoodType.sedih: bgColor = AppColors.moodSedih; break;
-        case MoodType.biasaAja: bgColor = AppColors.moodBiasaAja; break;
+        case MoodType.biasa: bgColor = AppColors.moodBiasa; break;
         case MoodType.senang: bgColor = AppColors.moodSenang; break;
-        case MoodType.sangatSenang: bgColor = AppColors.moodSangatSenang; break;
+        case MoodType.marah: bgColor = AppColors.moodMarah; break;
       }
     }
 
@@ -206,9 +206,10 @@ class _CalendarDay extends StatelessWidget {
               ),
             ),
             if (mood != null)
-              Text(
-                _getEmoji(mood!),
-                style: const TextStyle(fontSize: 12),
+              Image.asset(
+                _getMoodIcon(mood!),
+                width: 14,
+                height: 14,
               ),
           ],
         ),
@@ -216,12 +217,12 @@ class _CalendarDay extends StatelessWidget {
     );
   }
 
-  String _getEmoji(MoodType type) {
+  String _getMoodIcon(MoodType type) {
     switch (type) {
-      case MoodType.sedih: return '😞';
-      case MoodType.biasaAja: return '😐';
-      case MoodType.senang: return '🙂';
-      case MoodType.sangatSenang: return '😄';
+      case MoodType.sedih: return 'assets/icons/3.png';
+      case MoodType.biasa: return 'assets/icons/2.png';
+      case MoodType.senang: return 'assets/icons/4.png';
+      case MoodType.marah: return 'assets/icons/1.png';
     }
   }
 }

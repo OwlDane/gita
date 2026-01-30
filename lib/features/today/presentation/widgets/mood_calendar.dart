@@ -80,12 +80,12 @@ class _CalendarItem extends StatelessWidget {
     this.mood,
   });
 
-  String _getEmoji(MoodType? mood) {
+  String _getMoodIcon(MoodType? mood) {
     switch (mood) {
-      case MoodType.sedih: return '😞';
-      case MoodType.biasaAja: return '😐';
-      case MoodType.senang: return '🙂';
-      case MoodType.sangatSenang: return '😄';
+      case MoodType.sedih: return 'assets/icons/3.png';
+      case MoodType.biasa: return 'assets/icons/2.png';
+      case MoodType.senang: return 'assets/icons/4.png';
+      case MoodType.marah: return 'assets/icons/1.png';
       default: return '';
     }
   }
@@ -93,9 +93,9 @@ class _CalendarItem extends StatelessWidget {
   Color _getMoodColor(MoodType? mood) {
     switch (mood) {
       case MoodType.sedih: return AppColors.moodSedih;
-      case MoodType.biasaAja: return AppColors.moodBiasaAja;
+      case MoodType.biasa: return AppColors.moodBiasa;
       case MoodType.senang: return AppColors.moodSenang;
-      case MoodType.sangatSenang: return AppColors.moodSangatSenang;
+      case MoodType.marah: return AppColors.moodMarah;
       default: return Colors.transparent;
     }
   }
@@ -125,7 +125,7 @@ class _CalendarItem extends StatelessWidget {
           ),
           alignment: Alignment.center,
           child: mood != null 
-            ? Text(_getEmoji(mood), style: const TextStyle(fontSize: 18))
+            ? Image.asset(_getMoodIcon(mood), width: 22, height: 22)
             : Text(
                 date.day.toString(),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
