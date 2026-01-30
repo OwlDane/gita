@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/features/today/presentation/today_screen.dart';
 import 'package:gita/features/history/presentation/history_screen.dart';
 import 'package:gita/features/insights/presentation/insights_screen.dart';
+import 'package:gita/features/habits/presentation/habit_screen.dart';
 import 'package:gita/core/theme/app_colors.dart';
 import 'package:gita/shared/providers/navigation_provider.dart';
 
@@ -11,6 +12,7 @@ class MainNavigation extends ConsumerWidget {
 
   static const List<Widget> _screens = [
     TodayScreen(),
+    HabitScreen(),
     HistoryScreen(),
     InsightsScreen(),
   ];
@@ -57,6 +59,11 @@ class MainNavigation extends ConsumerWidget {
                 icon: Icon(Icons.grid_view_rounded, size: 24),
                 activeIcon: Icon(Icons.grid_view_rounded, size: 24),
                 label: 'Today',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.check_circle_outline_rounded, size: 24),
+                activeIcon: Icon(Icons.check_circle_rounded, size: 24),
+                label: 'Habits',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.calendar_today_rounded, size: 22),

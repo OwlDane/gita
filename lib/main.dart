@@ -6,7 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gita/core/theme/app_theme.dart';
 import 'package:gita/features/today/data/mood_entry.dart';
+import 'package:gita/features/habits/data/habit.dart';
 import 'package:gita/shared/widgets/splash_screen.dart';
+import 'package:gita/features/habits/data/habit_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,9 +24,14 @@ void main() async {
   // Register Adapters
   Hive.registerAdapter(MoodTypeAdapter());
   Hive.registerAdapter(MoodEntryAdapter());
+  Hive.registerAdapter(HabitStatusAdapter());
+  Hive.registerAdapter(HabitAdapter());
+  Hive.registerAdapter(HabitLogAdapter());
   
   // Open Box
   await Hive.openBox<MoodEntry>('mood_entries');
+  await Hive.openBox<Habit>(HabitRepository.habitBoxName);
+  await Hive.openBox<HabitLog>(HabitRepository.logBoxName);
 
   runApp(
     const ProviderScope(
