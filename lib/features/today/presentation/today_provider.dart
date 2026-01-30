@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/features/history/data/mood_repository.dart';
 import 'package:gita/features/today/data/mood_entry.dart';
@@ -84,7 +83,7 @@ class TodayNotifier extends StateNotifier<TodayState> {
     state = state.copyWith(isSaving: true);
 
     final entry = MoodEntry(
-      id: state.existingId ?? Uuid().v4(),
+      id: state.existingId ?? const Uuid().v4(),
       mood: state.selectedMood!,
       intensity: state.intensity,
       journal: state.journalText,

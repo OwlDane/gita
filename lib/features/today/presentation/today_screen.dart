@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/core/constants/breakpoints.dart';
-import 'package:gita/features/today/data/mood_entry.dart';
 import 'package:gita/core/theme/app_colors.dart';
 import 'package:gita/features/today/presentation/today_provider.dart';
 import 'package:gita/features/history/data/mood_repository.dart';
@@ -41,7 +40,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.primary.withOpacity(0.05),
+                color: AppColors.primary.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -53,7 +52,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
               height: 250,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.moodSedih.withOpacity(0.03),
+                color: AppColors.moodSedih.withValues(alpha: 0.03),
               ),
             ),
           ),
@@ -73,27 +72,27 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
 
                   return SingleChildScrollView(
                     padding: EdgeInsets.fromLTRB(horizontalPadding, 32, horizontalPadding, 120),
-                    child: Column(
+                    child: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const _AnimatedFadeIn(child: GreetingHeader()),
-                        const SizedBox(height: 32),
-                        const _AnimatedFadeIn(
+                        _AnimatedFadeIn(child: GreetingHeader()),
+                        SizedBox(height: 32),
+                        _AnimatedFadeIn(
                           delay: Duration(milliseconds: 100),
                           child: MoodCalendar(),
                         ),
-                        const SizedBox(height: 48),
-                        const _AnimatedFadeIn(
+                        SizedBox(height: 48),
+                        _AnimatedFadeIn(
                           delay: Duration(milliseconds: 200),
                           child: MoodSection(),
                         ),
-                        const SizedBox(height: 48),
-                        const _AnimatedFadeIn(
+                        SizedBox(height: 48),
+                        _AnimatedFadeIn(
                           delay: Duration(milliseconds: 400),
                           child: JournalInput(),
                         ),
-                        const SizedBox(height: 40),
-                        const _AnimatedFadeIn(
+                        SizedBox(height: 40),
+                        _AnimatedFadeIn(
                           delay: Duration(milliseconds: 600),
                           child: SaveButton(),
                         ),
@@ -182,9 +181,11 @@ class SaveButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(todayProvider);
+    final isSaving = ref.watch(todayProvider.select((s) => s.isSaving));
+    final hasMood = ref.watch(todayProvider.select((s) => s.selectedMood != null));
+    final isEditing = ref.watch(todayProvider.select((s) => s.existingId != null));
     final repo = ref.read(moodRepositoryProvider);
-    final isEnabled = state.selectedMood != null && !state.isSaving;
+    final isEnabled = hasMood && !isSaving;
 
     return ElevatedButton(
       onPressed: isEnabled ? () async {
@@ -198,13 +199,13 @@ class SaveButton extends ConsumerWidget {
           );
         }
       } : null,
-      child: state.isSaving 
+      child: isSaving 
         ? const SizedBox(
             height: 20, 
             width: 20, 
             child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
           ) 
-        : Text(state.existingId != null ? 'Perbarui Cerita' : 'Simpan Cerita'),
+        : Text(isEditing ? 'Perbarui Cerita' : 'Simpan Cerita'),
     );
   }
 }
@@ -225,7 +226,7 @@ class MoodSection extends ConsumerWidget {
         ),
         const SizedBox(height: 24),
         MoodPicker(
-          selectedMood: ref.watch(todayProvider).selectedMood,
+          selectedMood: ref.watch(todayProvider.select((s) => s.selectedMood)),
           onSelect: ref.read(todayProvider.notifier).selectMood,
         ),
         const SizedBox(height: 48),
@@ -240,7 +241,7 @@ class IntensitySection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final intensity = ref.watch(todayProvider).intensity;
+    final intensity = ref.watch(todayProvider.select((s) => s.intensity));
     final notifier = ref.read(todayProvider.notifier);
 
     return IntensityPicker(

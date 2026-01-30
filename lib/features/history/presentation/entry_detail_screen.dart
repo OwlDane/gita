@@ -78,14 +78,13 @@ class _EntryDetailScreenState extends ConsumerState<EntryDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final editState = ref.watch(editEntryProvider);
+    final isSaving = ref.watch(editEntryProvider.select((s) => s.isSaving));
+    final editSelectedMood = ref.watch(editEntryProvider.select((s) => s.selectedMood));
+    final editIntensity = ref.watch(editEntryProvider.select((s) => s.intensity));
     final editNotifier = ref.read(editEntryProvider.notifier);
 
     // If not editing, we use the widget.entry directly. 
-    // If editing, we use the editState.
-    final currentMood = _isEditing ? editState.selectedMood : widget.entry.mood;
-    final currentJournal = _isEditing ? editState.journalText : widget.entry.journal;
-    final currentIntensity = _isEditing ? editState.intensity : widget.entry.intensity;
+    // If editing, we use the edit state.
 
     return Scaffold(
       appBar: AppBar(
@@ -97,7 +96,7 @@ class _EntryDetailScreenState extends ConsumerState<EntryDetailScreen> {
               onPressed: _toggleEdit,
             ),
             IconButton(
-              icon: editState.isSaving 
+              icon: isSaving 
                   ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                   : const Icon(Icons.check_rounded),
               onPressed: _saveChanges,
@@ -128,12 +127,12 @@ class _EntryDetailScreenState extends ConsumerState<EntryDetailScreen> {
               ),
               const SizedBox(height: 16),
               MoodPicker(
-                selectedMood: editState.selectedMood,
+                selectedMood: editSelectedMood,
                 onSelect: editNotifier.selectMood,
               ),
               const SizedBox(height: 32),
               IntensityPicker(
-                intensity: editState.intensity,
+                intensity: editIntensity,
                 onChanged: editNotifier.updateIntensity,
               ),
               const SizedBox(height: 32),

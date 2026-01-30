@@ -27,7 +27,9 @@ class InsightsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final insights = ref.watch(insightsProvider);
+    final streak = ref.watch(insightsProvider.select((s) => s.streak));
+    final moodDistribution = ref.watch(insightsProvider.select((s) => s.moodDistribution));
+    final mostFrequentMood = ref.watch(insightsProvider.select((s) => s.mostFrequentMood));
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +41,7 @@ class InsightsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _AnimatedFadeIn(child: _StreakCard(streak: insights.streak)),
+            _AnimatedFadeIn(child: _StreakCard(streak: streak)),
             const SizedBox(height: 32),
             _AnimatedFadeIn(
               delay: const Duration(milliseconds: 200),
@@ -52,14 +54,14 @@ class InsightsScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 16),
-            if (insights.moodDistribution.isEmpty)
+            if (moodDistribution.isEmpty)
               const Center(child: Text('Belum ada data untuk ditampilkan'))
             else
               ...MoodType.values.asMap().entries.map((entry) {
                 final index = entry.key;
                 final mood = entry.value;
-                final count = insights.moodDistribution[mood] ?? 0;
-                final total = insights.moodDistribution.values.fold(0, (sum, item) => sum + item);
+                final count = moodDistribution[mood] ?? 0;
+                final total = moodDistribution.values.fold(0, (sum, item) => sum + item);
                 final percentage = total > 0 ? count / total : 0.0;
                 
                 return _AnimatedFadeIn(
@@ -74,12 +76,12 @@ class InsightsScreen extends ConsumerWidget {
                 );
               }),
             const SizedBox(height: 32),
-            if (insights.mostFrequentMood != null)
+            if (mostFrequentMood != null)
               _AnimatedFadeIn(
                 delay: const Duration(milliseconds: 800),
                 child: _MostFrequentCard(
-                  mood: _getMoodLabel(insights.mostFrequentMood!),
-                  iconPath: _getMoodIcon(insights.mostFrequentMood!),
+                  mood: _getMoodLabel(mostFrequentMood),
+                  iconPath: _getMoodIcon(mostFrequentMood),
                 ),
               ),
           ],
@@ -113,7 +115,7 @@ class _StreakCard extends StatelessWidget {
         border: Border.all(color: AppColors.divider, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),

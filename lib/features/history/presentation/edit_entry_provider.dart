@@ -75,7 +75,7 @@ class EditEntryNotifier extends StateNotifier<EditEntryState> {
     state = state.copyWith(isSaving: true);
 
     final entry = MoodEntry(
-      id: state.existingId ?? Uuid().v4(),
+      id: state.existingId ?? const Uuid().v4(),
       mood: state.selectedMood!,
       intensity: state.intensity,
       journal: state.journalText,
