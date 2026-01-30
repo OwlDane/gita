@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:gita/core/theme/app_colors.dart';
 import 'package:gita/features/history/data/mood_repository.dart';
 import 'package:gita/features/today/data/mood_entry.dart';
+import 'package:gita/features/history/presentation/calendar_screen.dart';
 
 class MoodCalendar extends ConsumerWidget {
   const MoodCalendar({super.key});
@@ -17,28 +18,53 @@ class MoodCalendar extends ConsumerWidget {
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
     
-    return Container(
-      height: 100,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.divider, width: 1),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(7, (index) {
-          final date = startOfWeek.add(Duration(days: index));
-          final isToday = date.day == now.day && date.month == now.month && date.year == now.year;
-          final entry = repository.getEntryByDate(date);
-          
-          return _CalendarItem(
-            date: date,
-            isToday: isToday,
-            mood: entry?.mood,
-          );
-        }),
-      ),
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Kalender Mood',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CalendarScreen()),
+                );
+              },
+              child: const Text('Lihat Semua'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Container(
+          height: 90,
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: AppColors.divider, width: 1),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(7, (index) {
+              final date = startOfWeek.add(Duration(days: index));
+              final isToday = date.day == now.day && date.month == now.month && date.year == now.year;
+              final entry = repository.getEntryByDate(date);
+              
+              return _CalendarItem(
+                date: date,
+                isToday: isToday,
+                mood: entry?.mood,
+              );
+            }),
+          ),
+        ),
+      ],
     );
   }
 }
