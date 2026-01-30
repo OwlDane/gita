@@ -117,10 +117,8 @@ class _HabitCard extends ConsumerWidget {
     
     if (log != null) {
       if (log.status == HabitStatus.completed) {
-        statusColor = Colors.green.withValues(alpha: 0.1);
         statusIcon = const Icon(Icons.check_circle_rounded, color: Colors.green);
       } else if (log.status == HabitStatus.skipped) {
-        statusColor = Colors.orange.withValues(alpha: 0.1);
         statusIcon = const Icon(Icons.do_not_disturb_on_rounded, color: Colors.orange);
       }
     }

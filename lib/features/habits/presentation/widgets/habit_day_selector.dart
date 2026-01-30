@@ -19,7 +19,7 @@ class HabitDaySelector extends ConsumerWidget {
     });
 
     return Container(
-      height: 90,
+      height: 100,
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
@@ -73,7 +73,7 @@ class HabitDaySelector extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: isSelected ? Colors.white : AppColors.textMain,
+                        color: isSelected ? AppColors.background : AppColors.textMain,
                       ),
                     ),
                   ),
