@@ -60,12 +60,14 @@ final habitRepositoryProvider = Provider<HabitRepository>((ref) {
   return HabitRepository();
 });
 
-final habitsProvider = StreamProvider<List<Habit>>((ref) {
+final habitsProvider = StreamProvider<List<Habit>>((ref) async* {
   final repo = ref.watch(habitRepositoryProvider);
-  return repo.watchHabits().map((_) => repo.getAllHabits());
+  yield repo.getAllHabits();
+  yield* repo.watchHabits().map((_) => repo.getAllHabits());
 });
 
-final habitLogsForDateProvider = StreamProvider.family<List<HabitLog>, DateTime>((ref, date) {
+final habitLogsForDateProvider = StreamProvider.family<List<HabitLog>, DateTime>((ref, date) async* {
   final repo = ref.watch(habitRepositoryProvider);
-  return repo.watchLogs().map((_) => repo.getLogsForDate(date));
+  yield repo.getLogsForDate(date);
+  yield* repo.watchLogs().map((_) => repo.getLogsForDate(date));
 });
