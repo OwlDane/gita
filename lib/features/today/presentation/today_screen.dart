@@ -4,6 +4,8 @@ import 'package:gita/core/constants/breakpoints.dart';
 import 'package:gita/core/theme/app_colors.dart';
 import 'package:gita/features/today/presentation/today_provider.dart';
 import 'package:gita/features/history/data/mood_repository.dart';
+import 'package:gita/features/habits/data/habit.dart';
+import 'package:gita/features/habits/data/habit_repository.dart';
 import 'package:gita/features/today/presentation/widgets/greeting_header.dart';
 import 'package:gita/features/today/presentation/widgets/mood_picker.dart';
 import 'package:gita/features/today/presentation/widgets/mood_calendar.dart';
@@ -82,12 +84,22 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                           child: MoodCalendar(),
                         ),
                         const SizedBox(height: 48),
-                        if (hasEntry)
+                        if (hasEntry) ...[
                           const _AnimatedFadeIn(
                             delay: Duration(milliseconds: 200),
                             child: TodayCompletionSection(),
-                          )
-                        else ...[
+                          ),
+                          const SizedBox(height: 32),
+                          const _AnimatedFadeIn(
+                            delay: Duration(milliseconds: 400),
+                            child: HabitSummaryCard(),
+                          ),
+                          const SizedBox(height: 32),
+                          const _AnimatedFadeIn(
+                            delay: Duration(milliseconds: 600),
+                            child: DailyQuote(),
+                          ),
+                        ] else ...[
                           const _AnimatedFadeIn(
                             delay: Duration(milliseconds: 200),
                             child: MoodSection(),
@@ -375,6 +387,184 @@ class TodayCompletionSection extends ConsumerWidget {
               ),
             ),
             child: const Text('Buka Riwayat Cerita'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HabitSummaryCard extends ConsumerWidget {
+  const HabitSummaryCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final habitsAsync = ref.watch(habitsProvider);
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final logsAsync = ref.watch(habitLogsForDateProvider(today));
+
+    return habitsAsync.when(
+      data: (habits) {
+        if (habits.isEmpty) return const SizedBox.shrink();
+
+        final dayOfWeek = now.weekday;
+        final todaysHabits = habits.where((h) => h.daysOfWeek.contains(dayOfWeek)).toList();
+        if (todaysHabits.isEmpty) return const SizedBox.shrink();
+
+        return logsAsync.when(
+          data: (logs) {
+            final completedCount = todaysHabits.where((h) {
+              final log = logs.where((l) => l.habitId == h.id).firstOrNull;
+              return log?.status == HabitStatus.completed;
+            }).length;
+
+            final progress = (todaysHabits.isEmpty) ? 0.0 : completedCount / todaysHabits.length;
+
+            return GestureDetector(
+              onTap: () => ref.read(navigationProvider.notifier).state = 1, // Habits index
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(32),
+                  border: Border.all(color: AppColors.textMain.withValues(alpha: 0.05), width: 1.5),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Progres Kebiasaan',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textMain,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '$completedCount/${todaysHabits.length}',
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        minHeight: 10,
+                        backgroundColor: AppColors.background,
+                        valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      progress == 1.0 
+                        ? 'Luar biasa! Semua kebiasaan hari ini sudah tuntas. 🔥' 
+                        : 'Yuk, selesaikan ${todaysHabits.length - completedCount} kebiasaan lagi hari ini!',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textSecondary.withValues(alpha: 0.8),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Lihat Detail',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary.withValues(alpha: 0.8),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 12,
+                          color: AppColors.primary.withValues(alpha: 0.8),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+          loading: () => const SizedBox.shrink(),
+          error: (_, __) => const SizedBox.shrink(),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class DailyQuote extends StatelessWidget {
+  const DailyQuote({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // List of inspiring quotes
+    final quotes = [
+      "Kebahagiaan bukan sesuatu yang sudah jadi. Itu berasal dari tindakanmu sendiri.",
+      "Setiap hari adalah kesempatan baru untuk menjadi lebih baik dari kemarin.",
+      "Tarik napas dalam-dalam. Ini hanya hari yang buruk, bukan kehidupan yang buruk.",
+      "Fokus pada hal-hal kecil yang membuatmu bersyukur hari ini.",
+      "Kamu tidak perlu melihat seluruh tangga, cukup ambil langkah pertama.",
+      "Satu-satunya cara untuk melakukan pekerjaan hebat adalah dengan mencintai apa yang kamu lakukan.",
+      "Kesehatan mentalmu adalah prioritas. Istirahatlah jika perlu.",
+    ];
+
+    // Select quote based on day of year
+    final dayOfYear = DateTime.now().difference(DateTime(DateTime.now().year, 1, 1)).inDays;
+    final quote = quotes[dayOfYear % quotes.length];
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColors.primary.withValues(alpha: 0.05),
+            AppColors.moodSedih.withValues(alpha: 0.05),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: AppColors.textMain.withValues(alpha: 0.03)),
+      ),
+      child: Column(
+        children: [
+          const Icon(Icons.format_quote_rounded, color: AppColors.primary, size: 32),
+          const SizedBox(height: 16),
+          Text(
+            quote,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.italic,
+              height: 1.6,
+              color: AppColors.textMain,
+            ),
           ),
         ],
       ),
