@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/features/today/presentation/today_screen.dart';
@@ -22,60 +23,60 @@ class MainNavigation extends ConsumerWidget {
     final selectedIndex = ref.watch(navigationProvider);
 
     return Scaffold(
+      extendBody: true,
       body: IndexedStack(
         index: selectedIndex,
         children: _screens,
       ),
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.fromLTRB(24, 0, 24, 32),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: AppColors.divider, width: 1),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.3),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
+        margin: const EdgeInsets.fromLTRB(28, 0, 28, 32),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(32),
-          child: BottomNavigationBar(
-            currentIndex: selectedIndex,
-            onTap: (index) {
-              ref.read(navigationProvider.notifier).state = index;
-            },
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            selectedItemColor: AppColors.primary,
-            unselectedItemColor: AppColors.textSecondary.withValues(alpha: 0.4),
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            type: BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.grid_view_rounded, size: 24),
-                activeIcon: Icon(Icons.grid_view_rounded, size: 24),
-                label: 'Today',
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              height: 72,
+              decoration: BoxDecoration(
+                color: AppColors.surface.withValues(alpha: 0.8),
+                borderRadius: BorderRadius.circular(32),
+                border: Border.all(color: AppColors.textMain.withValues(alpha: 0.08), width: 1.5),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.check_circle_outline_rounded, size: 24),
-                activeIcon: Icon(Icons.check_circle_rounded, size: 24),
-                label: 'Habits',
+              child: BottomNavigationBar(
+                currentIndex: selectedIndex,
+                onTap: (index) {
+                  ref.read(navigationProvider.notifier).state = index;
+                },
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                selectedItemColor: AppColors.primary,
+                unselectedItemColor: AppColors.textSecondary.withValues(alpha: 0.3),
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                type: BottomNavigationBarType.fixed,
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.grid_view_rounded, size: 24),
+                    activeIcon: Icon(Icons.grid_view_rounded, size: 24),
+                    label: 'Today',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.check_circle_outline_rounded, size: 24),
+                    activeIcon: Icon(Icons.check_circle_rounded, size: 24),
+                    label: 'Habits',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.calendar_today_rounded, size: 22),
+                    activeIcon: Icon(Icons.calendar_today_rounded, size: 22),
+                    label: 'History',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.analytics_outlined, size: 24),
+                    activeIcon: Icon(Icons.analytics_rounded, size: 24),
+                    label: 'Insights',
+                  ),
+                ],
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_today_rounded, size: 22),
-                activeIcon: Icon(Icons.calendar_today_rounded, size: 22),
-                label: 'History',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.analytics_outlined, size: 24),
-                activeIcon: Icon(Icons.analytics_rounded, size: 24),
-                label: 'Insights',
-              ),
-            ],
+            ),
           ),
         ),
       ),

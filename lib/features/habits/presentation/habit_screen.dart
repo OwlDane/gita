@@ -126,44 +126,64 @@ class _HabitCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () => _showLogSheet(context),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         decoration: BoxDecoration(
-          color: log?.status == HabitStatus.completed ? Colors.green.withValues(alpha: 0.05) : AppColors.surface,
-          borderRadius: BorderRadius.circular(24),
+          color: log?.status == HabitStatus.completed 
+              ? Colors.green.withValues(alpha: 0.08) 
+              : AppColors.surface,
+          borderRadius: BorderRadius.circular(28),
           border: Border.all(
-            color: log?.status == HabitStatus.completed ? Colors.green.withValues(alpha: 0.3) : AppColors.divider, 
-            width: 1,
+            color: log?.status == HabitStatus.completed 
+                ? Colors.green.withValues(alpha: 0.4) 
+                : AppColors.textMain.withValues(alpha: 0.05), 
+            width: 1.5,
           ),
+          boxShadow: [
+            if (log?.status == HabitStatus.completed)
+              BoxShadow(
+                color: Colors.green.withValues(alpha: 0.1),
+                blurRadius: 15,
+                offset: const Offset(0, 4),
+              )
+          ],
         ),
         child: Row(
           children: [
             Container(
-              width: 48,
-              height: 48,
+              width: 52,
+              height: 52,
               decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(14),
+                color: log?.status == HabitStatus.completed 
+                    ? Colors.green.withValues(alpha: 0.2) 
+                    : AppColors.background,
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: const Center(child: Icon(Icons.star_rounded, color: AppColors.primary)),
+              child: Center(
+                child: log?.status == HabitStatus.completed
+                  ? const Icon(Icons.check_rounded, color: Colors.green, size: 28)
+                  : const Icon(Icons.star_rounded, color: AppColors.primary, size: 28),
+              ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 18),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     timeStr,
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: TextStyle(
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textSecondary,
+                      color: AppColors.textSecondary.withValues(alpha: 0.6),
+                      letterSpacing: 0.5,
                     ),
                   ),
+                  const SizedBox(height: 2),
                   Text(
                     habit.name,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 17,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textMain,
                     ),

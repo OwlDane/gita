@@ -173,10 +173,13 @@ class _EntryDetailScreenState extends ConsumerState<EntryDetailScreen> {
                 ),
                 child: Row(
                   children: [
-                    Image.asset(
-                      _getMoodIcon(widget.entry.mood),
-                      width: 56,
-                      height: 56,
+                    Hero(
+                      tag: 'mood_${widget.entry.id}',
+                      child: Image.asset(
+                        _getMoodIcon(widget.entry.mood),
+                        width: 56,
+                        height: 56,
+                      ),
                     ),
                     const SizedBox(width: 24),
                     Column(

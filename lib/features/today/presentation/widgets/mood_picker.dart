@@ -82,19 +82,26 @@ class _MoodItem extends StatelessWidget {
             curve: Curves.easeOutQuart,
             width: 72,
             height: 72,
+            transform: Matrix4.diagonal3Values(
+              isSelected ? 1.05 : 1.0,
+              isSelected ? 1.05 : 1.0,
+              1.0,
+            ),
             decoration: BoxDecoration(
               color: isSelected ? color : AppColors.surface,
               shape: BoxShape.circle,
               border: Border.all(
-                color: isSelected ? color : AppColors.divider,
-                width: 2,
+                color: isSelected ? color.withValues(alpha: 0.5) : AppColors.divider,
+                width: 1.5,
               ),
               boxShadow: [
-                BoxShadow(
-                  color: color.withValues(alpha: isSelected ? 0.4 : 0.0),
-                  blurRadius: isSelected ? 20.0 : 0.0,
-                  spreadRadius: isSelected ? 2.0 : 0.0,
-                )
+                if (isSelected)
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.2),
+                    blurRadius: 20,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 8),
+                  )
               ],
             ),
             alignment: Alignment.center,

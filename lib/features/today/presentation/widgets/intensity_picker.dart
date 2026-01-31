@@ -25,12 +25,19 @@ class IntensityPicker extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
             ),
-            Text(
-              '$intensity/5',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w800,
-                  ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '$intensity/5',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w800,
+                    ),
+              ),
             ),
           ],
         ),
@@ -39,12 +46,13 @@ class IntensityPicker extends StatelessWidget {
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: AppColors.primary,
             inactiveTrackColor: AppColors.surface,
-            thumbColor: AppColors.primary,
+            thumbColor: Colors.white,
             overlayColor: AppColors.primary.withValues(alpha: 0.2),
             trackHeight: 12,
             thumbShape: const RoundSliderThumbShape(
-              enabledThumbRadius: 12,
+              enabledThumbRadius: 14,
               elevation: 4,
+              pressedElevation: 8,
             ),
             trackShape: const RoundedRectSliderTrackShape(),
           ),
@@ -57,12 +65,12 @@ class IntensityPicker extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Biasa aja', style: Theme.of(context).textTheme.labelSmall),
-              Text('Banget!', style: Theme.of(context).textTheme.labelSmall),
+              Text('Ringan', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.textSecondary.withValues(alpha: 0.5))),
+              Text('Kuat', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.textSecondary.withValues(alpha: 0.5))),
             ],
           ),
         ),

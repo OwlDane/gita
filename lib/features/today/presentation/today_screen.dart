@@ -58,16 +58,13 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
           ),
           Positioned.fill(
             child: SafeArea(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  // Guard against unconstrained width
-                  final maxWidth = constraints.maxWidth.isInfinite 
-                      ? MediaQuery.of(context).size.width 
-                      : constraints.maxWidth;
+              child: Builder(
+                builder: (context) {
+                  final screenWidth = MediaQuery.of(context).size.width;
                   
                   // Responsive width handling
-                  final double horizontalPadding = maxWidth > AppBreakpoints.tablet 
-                      ? maxWidth * 0.2 
+                  final double horizontalPadding = screenWidth > AppBreakpoints.tablet 
+                      ? screenWidth * 0.2 
                       : 24.0;
 
                   return SingleChildScrollView(

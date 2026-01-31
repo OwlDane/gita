@@ -66,11 +66,18 @@ class _HistoryCard extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(24),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: AppColors.divider, width: 1),
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(color: AppColors.textMain.withValues(alpha: 0.05), width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -79,16 +86,20 @@ class _HistoryCard extends StatelessWidget {
               height: 56,
               decoration: BoxDecoration(
                 color: AppColors.background,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: AppColors.textMain.withValues(alpha: 0.03)),
               ),
               alignment: Alignment.center,
-              child: Image.asset(
-                _getMoodIcon(entry.mood),
-                width: 32,
-                height: 32,
+              child: Hero(
+                tag: 'mood_${entry.id}',
+                child: Image.asset(
+                  _getMoodIcon(entry.mood),
+                  width: 36,
+                  height: 36,
+                ),
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 18),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,24 +107,26 @@ class _HistoryCard extends StatelessWidget {
                   Text(
                     DateFormat('EEEE, d MMMM', 'id').format(entry.date),
                     style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17,
+                      color: AppColors.textMain,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Text(
                     entry.journal.isEmpty ? 'Tidak ada catatan' : entry.journal,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: AppColors.textSecondary,
+                    style: TextStyle(
+                      color: AppColors.textMain.withValues(alpha: 0.4),
                       fontSize: 14,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+            Icon(Icons.chevron_right_rounded, color: AppColors.textMain.withValues(alpha: 0.2)),
           ],
         ),
       ),
