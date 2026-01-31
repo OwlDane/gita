@@ -59,9 +59,10 @@ class MoodRepository {
     }
   }
 
-  Stream<List<MoodEntry>> watchEntries() {
+  Stream<List<MoodEntry>> watchEntries() async* {
+    yield getAllEntries();
     final box = Hive.box<MoodEntry>(boxName);
-    return box.watch().map((_) => getAllEntries());
+    yield* box.watch().map((_) => getAllEntries());
   }
 }
 
