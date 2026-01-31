@@ -94,7 +94,7 @@ class TodayNotifier extends StateNotifier<TodayState> {
     await repository.addEntry(entry);
     
     state = state.copyWith(isSaving: false);
-    reset();
+    loadEntry(entry);
   }
 
   void reset() {

@@ -8,6 +8,7 @@ import 'package:gita/features/today/presentation/widgets/greeting_header.dart';
 import 'package:gita/features/today/presentation/widgets/mood_picker.dart';
 import 'package:gita/features/today/presentation/widgets/mood_calendar.dart';
 import 'package:gita/features/today/presentation/widgets/intensity_picker.dart';
+import 'package:gita/shared/providers/navigation_provider.dart';
 
 class TodayScreen extends ConsumerStatefulWidget {
   const TodayScreen({super.key});
@@ -67,32 +68,41 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                       ? screenWidth * 0.2 
                       : 24.0;
 
+                  final hasEntry = ref.watch(todayProvider.select((s) => s.existingId != null));
+
                   return SingleChildScrollView(
                     padding: EdgeInsets.fromLTRB(horizontalPadding, 32, horizontalPadding, 120),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _AnimatedFadeIn(child: GreetingHeader()),
-                        SizedBox(height: 32),
-                        _AnimatedFadeIn(
+                        const _AnimatedFadeIn(child: GreetingHeader()),
+                        const SizedBox(height: 32),
+                        const _AnimatedFadeIn(
                           delay: Duration(milliseconds: 100),
                           child: MoodCalendar(),
                         ),
-                        SizedBox(height: 48),
-                        _AnimatedFadeIn(
-                          delay: Duration(milliseconds: 200),
-                          child: MoodSection(),
-                        ),
-                        SizedBox(height: 48),
-                        _AnimatedFadeIn(
-                          delay: Duration(milliseconds: 400),
-                          child: JournalInput(),
-                        ),
-                        SizedBox(height: 40),
-                        _AnimatedFadeIn(
-                          delay: Duration(milliseconds: 600),
-                          child: SaveButton(),
-                        ),
+                        const SizedBox(height: 48),
+                        if (hasEntry)
+                          const _AnimatedFadeIn(
+                            delay: Duration(milliseconds: 200),
+                            child: TodayCompletionSection(),
+                          )
+                        else ...[
+                          const _AnimatedFadeIn(
+                            delay: Duration(milliseconds: 200),
+                            child: MoodSection(),
+                          ),
+                          const SizedBox(height: 48),
+                          const _AnimatedFadeIn(
+                            delay: Duration(milliseconds: 400),
+                            child: JournalInput(),
+                          ),
+                          const SizedBox(height: 40),
+                          const _AnimatedFadeIn(
+                            delay: Duration(milliseconds: 600),
+                            child: SaveButton(),
+                          ),
+                        ],
                       ],
                     ),
                   );
@@ -300,6 +310,73 @@ class _AnimatedFadeInState extends State<_AnimatedFadeIn> with SingleTickerProvi
       child: SlideTransition(
         position: _slide,
         child: widget.child,
+      ),
+    );
+  }
+}
+
+class TodayCompletionSection extends ConsumerWidget {
+  const TodayCompletionSection({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: AppColors.textMain.withValues(alpha: 0.05), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          const Text(
+            '✨',
+            style: TextStyle(fontSize: 48),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'Kamu sudah mengisi cerita hari ini, makasih ya!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textMain,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            'Mau cek atau perbarui ceritanya?',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 32),
+          ElevatedButton(
+            onPressed: () {
+              ref.read(navigationProvider.notifier).state = 2; // Index for History (Cerita Kamu)
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+              foregroundColor: AppColors.primary,
+              minimumSize: const Size(double.infinity, 56),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: const Text('Buka Riwayat Cerita'),
+          ),
+        ],
       ),
     );
   }
