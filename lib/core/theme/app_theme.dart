@@ -15,29 +15,31 @@ class AppTheme {
       ),
       textTheme: GoogleFonts.plusJakartaSansTextTheme().copyWith(
         displayLarge: GoogleFonts.plusJakartaSans(
-          fontSize: 32,
+          fontSize: 34,
+          fontWeight: FontWeight.w800,
+          color: AppColors.textMain,
+          letterSpacing: -1.0,
+        ),
+        displayMedium: GoogleFonts.plusJakartaSans(
+          fontSize: 26,
           fontWeight: FontWeight.w700,
           color: AppColors.textMain,
           letterSpacing: -0.5,
         ),
-        displayMedium: GoogleFonts.plusJakartaSans(
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textMain,
-        ),
         bodyLarge: GoogleFonts.plusJakartaSans(
-          fontSize: 16,
+          fontSize: 17,
+          fontWeight: FontWeight.w500,
           color: AppColors.textMain,
         ),
         bodyMedium: GoogleFonts.plusJakartaSans(
-          fontSize: 14,
+          fontSize: 15,
           color: AppColors.textSecondary,
         ),
         labelLarge: GoogleFonts.plusJakartaSans(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
+          fontSize: 13,
+          fontWeight: FontWeight.w700,
           color: AppColors.textSecondary,
-          letterSpacing: 1.2,
+          letterSpacing: 0.5,
         ),
       ),
       cardTheme: CardThemeData(
@@ -45,21 +47,21 @@ class AppTheme {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(30),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.black,
-          minimumSize: const Size(double.infinity, 60),
+          minimumSize: const Size(double.infinity, 56),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(22),
           ),
           textStyle: GoogleFonts.plusJakartaSans(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+            fontSize: 17,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),
