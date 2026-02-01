@@ -5,6 +5,7 @@ import 'package:gita/features/today/presentation/today_screen.dart';
 import 'package:gita/features/history/presentation/history_screen.dart';
 import 'package:gita/features/insights/presentation/insights_screen.dart';
 import 'package:gita/features/habits/presentation/habit_screen.dart';
+import 'package:gita/features/chat/presentation/widgets/chat_sheet.dart';
 import 'package:gita/core/theme/app_colors.dart';
 import 'package:gita/shared/providers/navigation_provider.dart';
 
@@ -27,6 +28,21 @@ class MainNavigation extends ConsumerWidget {
       body: IndexedStack(
         index: selectedIndex,
         children: _screens,
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 15, right: 7),
+        child: FloatingActionButton(
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) => const ChatSheet(),
+            );
+          },
+          backgroundColor: AppColors.primary,
+          child: const Text('✨', style: TextStyle(fontSize: 24)),
+        ),
       ),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.fromLTRB(28, 0, 28, 32),
