@@ -35,10 +35,10 @@ class InsightsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Catatanmu'),
-        centerTitle: true,
+        centerTitle: false,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 120),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

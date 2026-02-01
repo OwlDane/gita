@@ -24,7 +24,7 @@ class HistoryScreen extends ConsumerWidget {
             return const _EmptyState();
           }
           return ListView.separated(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
             itemCount: entries.length,
             separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
