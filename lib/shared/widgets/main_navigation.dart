@@ -29,21 +29,6 @@ class MainNavigation extends ConsumerWidget {
         index: selectedIndex,
         children: _screens,
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 15, right: 7),
-        child: FloatingActionButton(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (context) => const ChatSheet(),
-            );
-          },
-          backgroundColor: AppColors.primary,
-          child: const Text('✨', style: TextStyle(fontSize: 24)),
-        ),
-      ),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.fromLTRB(28, 0, 28, 32),
         child: ClipRRect(

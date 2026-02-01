@@ -6,6 +6,7 @@ import 'package:gita/features/today/presentation/today_provider.dart';
 import 'package:gita/features/history/data/mood_repository.dart';
 import 'package:gita/features/habits/data/habit.dart';
 import 'package:gita/features/habits/data/habit_repository.dart';
+import 'package:gita/features/chat/presentation/widgets/chat_sheet.dart';
 import 'package:gita/features/today/presentation/widgets/greeting_header.dart';
 import 'package:gita/features/today/presentation/widgets/mood_picker.dart';
 import 'package:gita/features/today/presentation/widgets/mood_calendar.dart';
@@ -32,6 +33,21 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 110),
+        child: FloatingActionButton(
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) => const ChatSheet(),
+            );
+          },
+          backgroundColor: AppColors.primary,
+          child: const Text('✨', style: TextStyle(fontSize: 24)),
+        ),
+      ),
       body: Stack(
         children: [
           // Background Decorative Blobs
