@@ -30,26 +30,36 @@ class InsightsScreen extends ConsumerWidget {
     final streak = ref.watch(insightsProvider.select((s) => s.streak));
     final moodDistribution = ref.watch(insightsProvider.select((s) => s.moodDistribution));
     final mostFrequentMood = ref.watch(insightsProvider.select((s) => s.mostFrequentMood));
+    final reflectionAsync = ref.watch(weeklyReflectionProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wawasan'),
-        centerTitle: false,
+        title: const Text('Catatanmu'),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _AnimatedFadeIn(child: _StreakCard(streak: streak)),
             const SizedBox(height: 32),
+            
+            // AI Reflection Card
             _AnimatedFadeIn(
               delay: const Duration(milliseconds: 200),
+              child: _RefleksiCard(reflectionAsync: reflectionAsync),
+            ),
+            
+            const SizedBox(height: 32),
+            _AnimatedFadeIn(
+              delay: const Duration(milliseconds: 400),
               child: Text(
                 'Distribusi Mood',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   fontSize: 18,
+                  letterSpacing: -0.5,
                 ),
               ),
             ),
@@ -65,7 +75,7 @@ class InsightsScreen extends ConsumerWidget {
                 final percentage = total > 0 ? count / total : 0.0;
                 
                 return _AnimatedFadeIn(
-                  delay: Duration(milliseconds: 300 + (index * 100)),
+                  delay: Duration(milliseconds: 500 + (index * 100)),
                   child: _MoodDistributionBar(
                     mood: _getMoodLabel(mood),
                     iconPath: _getMoodIcon(mood),
@@ -75,10 +85,10 @@ class InsightsScreen extends ConsumerWidget {
                   ),
                 );
               }),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
             if (mostFrequentMood != null)
               _AnimatedFadeIn(
-                delay: const Duration(milliseconds: 800),
+                delay: const Duration(milliseconds: 1000),
                 child: _MostFrequentCard(
                   mood: _getMoodLabel(mostFrequentMood),
                   iconPath: _getMoodIcon(mostFrequentMood),
@@ -200,6 +210,69 @@ class _MoodDistributionBar extends StatelessWidget {
               minHeight: 12,
               backgroundColor: AppColors.background,
               valueColor: AlwaysStoppedAnimation<Color>(color),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RefleksiCard extends StatelessWidget {
+  final AsyncValue<String> reflectionAsync;
+
+  const _RefleksiCard({required this.reflectionAsync});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.1), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Text('✨', style: TextStyle(fontSize: 20)),
+              const SizedBox(width: 8),
+              Text(
+                'Refleksi Gita',
+                style: TextStyle(
+                  color: AppColors.primary.withValues(alpha: 0.8),
+                  fontWeight: FontWeight.w800,
+                  fontSize: 14,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          reflectionAsync.when(
+            data: (text) => Text(
+              text,
+              style: const TextStyle(
+                color: AppColors.textMain,
+                fontSize: 15,
+                height: 1.5,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            loading: () => const SizedBox(
+              height: 20,
+              child: LinearProgressIndicator(
+                minHeight: 2,
+                backgroundColor: Colors.transparent,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+              ),
+            ),
+            error: (_, __) => const Text(
+              'Gagal memuat refleksi. Tapi tenang, kamu tetap hebat kok! ❤️',
+              style: TextStyle(color: AppColors.textSecondary),
             ),
           ),
         ],

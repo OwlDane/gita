@@ -5,7 +5,6 @@ import 'package:gita/features/today/presentation/today_screen.dart';
 import 'package:gita/features/history/presentation/history_screen.dart';
 import 'package:gita/features/insights/presentation/insights_screen.dart';
 import 'package:gita/features/habits/presentation/habit_screen.dart';
-import 'package:gita/features/chat/presentation/widgets/chat_sheet.dart';
 import 'package:gita/core/theme/app_colors.dart';
 import 'package:gita/shared/providers/navigation_provider.dart';
 

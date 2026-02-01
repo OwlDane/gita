@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/features/history/data/mood_repository.dart';
 import 'package:gita/features/today/data/mood_entry.dart';
+import 'package:gita/features/chat/presentation/chat_providers.dart';
 
 class InsightsData {
   final int streak;
@@ -69,5 +70,21 @@ final insightsProvider = Provider<InsightsData>((ref) {
     },
     loading: () => InsightsData(streak: 0, moodDistribution: {}),
     error: (_, __) => InsightsData(streak: 0, moodDistribution: {}),
+  );
+});
+
+final weeklyReflectionProvider = FutureProvider.autoDispose<String>((ref) async {
+  final entriesAsync = ref.watch(historyEntriesProvider);
+  
+  return entriesAsync.when(
+    data: (entries) async {
+      final now = DateTime.now();
+      final last7Days = entries.where((e) => now.difference(e.date).inDays <= 7).map((e) => e.journal).where((j) => j.isNotEmpty).toList();
+      
+      final repository = ref.watch(chatRepositoryProvider);
+      return repository.generateWeeklyReflection(last7Days);
+    },
+    loading: () => "Menganalisa minggu kamu...",
+    error: (_, __) => "Tetap semangat ya! ❤️",
   );
 });

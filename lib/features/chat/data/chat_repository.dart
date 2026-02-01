@@ -97,6 +97,47 @@ Langsung berikan kutipannya saja tanpa tambahan kata lain.
     return "Tetap semangat ya, kamu sudah melakukan yang terbaik hari ini! ✨";
   }
 
+  Future<String> generateWeeklyReflection(List<String> journals) async {
+    if (journals.isEmpty) return "Yuk, mulai catat ceritamu minggu ini biar Gita bisa kasih rahasia kecil buat kamu! ✨";
+
+    final journalsCombined = journals.map((j) => "- $j").join('\n');
+    final prompt = '''
+Berikut adalah ringkasan jurnal user selama seminggu terakhir:
+$journalsCombined
+
+Berdasarkan tulisan tersebut, berikan satu refleksi singkat (maksimal 20 kata) tentang "vibe" atau suasana hati user minggu ini. 
+Gunakan gaya bahasa Gita (sahabat yang sangat pengertian).
+Langsung berikan refleksinya saja.
+''';
+
+    try {
+      final response = await http.post(
+        Uri.parse(_baseUrl),
+        headers: {
+          'Authorization': 'Bearer ${Secrets.openRouterKey}',
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://github.com/zidnae/gita',
+        },
+        body: jsonEncode({
+          'model': _model,
+          'messages': [
+            {'role': 'system', 'content': _systemInstructions},
+            {'role': 'user', 'content': prompt},
+          ],
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final content = data['choices'][0]['message']['content'] as String;
+        return content.replaceAll(RegExp(r'<think>[\s\S]*?</think>'), '').replaceAll('"', '').trim();
+      }
+    } catch (e) {
+      debugPrint('Weekly Reflection Error: $e');
+    }
+    return "Minggu yang luar biasa! Kamu sudah berjuang dengan sangat hebat hari ini. ❤️";
+  }
+
   void resetChat() {
     _history.clear();
     _history.add({'role': 'system', 'content': _systemInstructions});
