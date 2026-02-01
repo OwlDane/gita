@@ -516,25 +516,12 @@ class HabitSummaryCard extends ConsumerWidget {
   }
 }
 
-class DailyQuote extends StatelessWidget {
+class DailyQuote extends ConsumerWidget {
   const DailyQuote({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // List of inspiring quotes
-    final quotes = [
-      "Kebahagiaan bukan sesuatu yang sudah jadi. Itu berasal dari tindakanmu sendiri.",
-      "Setiap hari adalah kesempatan baru untuk menjadi lebih baik dari kemarin.",
-      "Tarik napas dalam-dalam. Ini hanya hari yang buruk, bukan kehidupan yang buruk.",
-      "Fokus pada hal-hal kecil yang membuatmu bersyukur hari ini.",
-      "Kamu tidak perlu melihat seluruh tangga, cukup ambil langkah pertama.",
-      "Satu-satunya cara untuk melakukan pekerjaan hebat adalah dengan mencintai apa yang kamu lakukan.",
-      "Kesehatan mentalmu adalah prioritas. Istirahatlah jika perlu.",
-    ];
-
-    // Select quote based on day of year
-    final dayOfYear = DateTime.now().difference(DateTime(DateTime.now().year, 1, 1)).inDays;
-    final quote = quotes[dayOfYear % quotes.length];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final quoteAsync = ref.watch(dailyQuoteProvider);
 
     return Container(
       width: double.infinity,
@@ -555,15 +542,36 @@ class DailyQuote extends StatelessWidget {
         children: [
           const Icon(Icons.format_quote_rounded, color: AppColors.primary, size: 32),
           const SizedBox(height: 16),
-          Text(
-            quote,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.italic,
-              height: 1.6,
-              color: AppColors.textMain,
+          quoteAsync.when(
+            data: (quote) => Text(
+              quote,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.italic,
+                height: 1.6,
+                color: AppColors.textMain,
+              ),
+            ),
+            loading: () => Container(
+              height: 20,
+              width: 150,
+              decoration: BoxDecoration(
+                color: AppColors.textMain.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            error: (_, __) => const Text(
+              "Tetap semangat ya, kamu sudah melakukan yang terbaik hari ini! ✨",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.italic,
+                height: 1.6,
+                color: AppColors.textMain,
+              ),
             ),
           ),
         ],

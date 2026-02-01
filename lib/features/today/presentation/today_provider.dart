@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/features/history/data/mood_repository.dart';
 import 'package:gita/features/today/data/mood_entry.dart';
+import 'package:gita/features/chat/presentation/chat_providers.dart';
 import 'package:uuid/uuid.dart';
 
 class TodayState {
@@ -104,4 +105,15 @@ class TodayNotifier extends StateNotifier<TodayState> {
 
 final todayProvider = StateNotifierProvider<TodayNotifier, TodayState>((ref) {
   return TodayNotifier();
+});
+
+final dailyQuoteProvider = FutureProvider.autoDispose<String>((ref) async {
+  final journalText = ref.watch(todayProvider.select((s) => s.journalText));
+  
+  if (journalText.isEmpty) {
+    return "Tetap semangat ya, kamu sudah melakukan yang terbaik hari ini! ✨";
+  }
+  
+  final repository = ref.watch(chatRepositoryProvider);
+  return repository.generateQuote(journalText);
 });

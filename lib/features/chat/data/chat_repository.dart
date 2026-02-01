@@ -61,6 +61,42 @@ Aturan Utama:
     }
   }
 
+  Future<String> generateQuote(String journalText) async {
+    final prompt = '''
+Berdasarkan cerita user hari ini: "$journalText"
+Berikan satu kalimat inspirasi atau penyemangat yang sangat singkat (maksimal 15 kata).
+Gunakan gaya bahasa Gita (hangat, natural, layaknya sahabat).
+Langsung berikan kutipannya saja tanpa tambahan kata lain.
+''';
+
+    try {
+      final response = await http.post(
+        Uri.parse(_baseUrl),
+        headers: {
+          'Authorization': 'Bearer ${Secrets.openRouterKey}',
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://github.com/zidnae/gita',
+        },
+        body: jsonEncode({
+          'model': _model,
+          'messages': [
+            {'role': 'system', 'content': _systemInstructions},
+            {'role': 'user', 'content': prompt},
+          ],
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final content = data['choices'][0]['message']['content'] as String;
+        return content.replaceAll(RegExp(r'<think>[\s\S]*?</think>'), '').replaceAll('"', '').trim();
+      }
+    } catch (e) {
+      debugPrint('Quote Generation Error: $e');
+    }
+    return "Tetap semangat ya, kamu sudah melakukan yang terbaik hari ini! ✨";
+  }
+
   void resetChat() {
     _history.clear();
     _history.add({'role': 'system', 'content': _systemInstructions});
