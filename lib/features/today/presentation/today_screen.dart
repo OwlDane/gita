@@ -45,7 +45,15 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
             );
           },
           backgroundColor: AppColors.primary,
-          child: const Text('✨', style: TextStyle(fontSize: 24)),
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Icon(
+            Icons.smart_toy_rounded,
+            color: Colors.white,
+            size: 28,
+          ),
         ),
       ),
       body: Stack(
