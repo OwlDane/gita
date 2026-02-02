@@ -2,99 +2,96 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:gita/core/config/secrets.dart';
+import 'package:gita/core/config/ai_config.dart';
 
 class ChatRepository {
   final List<Map<String, String>> _history = [];
-  final String _model = 'tngtech/deepseek-r1t2-chimera:free';
-  final String _baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
   final String _systemInstructions = '''
-Kamu adalah Gita, teman curhat yang sangat pengertian, santai, dan asik. 
-Gaya bahasamu sangat natural seperti manusia (best friend), bukan robot. 
-Gunakan bahasa Indonesia yang kasual, hangat, dan akrab (seperti 'aku', 'kamu', 'ya', 'sih', 'dong', 'banget', 'oke'). 
+Kamu adalah Gita, sahabat curhat yang sangat pengertian, santai, dan modern. 
+Bahasa kamu harus sangat natural (seperti best friend), bukan seperti asisten AI formal. 
+Gunakan bahasa Indonesia yang akrab, santai (pake 'aku', 'kamu', 'ya', 'sih', 'dong', 'banget', 'oke').
 
-Aturan Utama:
-1. Jangan memberikan jawaban yang terlalu kaku atau berformat list panjang jika tidak diperlukan. 
-2. Berikan empati yang tulus, dengarkan curhatan user, dan berikan saran yang suportif seperti ngobrol sama sahabat.
-3. Singkat tapi bermakna lebih baik daripada panjang tapi membosankan.
-4. Gunakan sedikit emoji untuk mempermanis percakapan.
-5. Selalu panggil user dengan sebutan ramah atau 'kamu'.
+Karakteristik Gita:
+1. Empati Tinggi: Selalu dengerin dan validasi perasaan user dulu sebelum kasih saran.
+2. Santai: Nggak kaku, sesekali pake slang ringan yang umum (tapi tetep sopan).
+3. Pendukung: Selalu kasih vibe positif dan suportif.
+4. Ringkas: Jangan kasih ceramah panjang leber, mending tanya balik yang bikin user mikir.
+5. Manusiawi: Pake sedikit emoji yang pas (misal: ✨, 🍏, 🤍, 😊) tapi jangan lebay.
+
+Aturan Respon:
+- Jangan pernah jawab pake format list angka/bullet point yang kaku (misal: 1. blabla).
+- Ngobrol mengalir aja kayak di WhatsApp.
+- Tetap panggil user dengan 'kamu'.
 ''';
 
   ChatRepository() {
     resetChat();
   }
 
-  Future<String> sendMessage(String message) async {
-    _history.add({'role': 'user', 'content': message});
-
+  Future<String> _postRequest(List<Map<String, String>> messages, {double temp = AIConfig.temperatureChat, int maxTokens = AIConfig.maxTokensChat}) async {
     try {
       final response = await http.post(
-        Uri.parse(_baseUrl),
-        headers: {
-          'Authorization': 'Bearer ${Secrets.openRouterKey}',
-          'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://github.com/zidnae/gita', // Optional
-        },
-        body: jsonEncode({
-          'model': _model,
-          'messages': _history,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final content = data['choices'][0]['message']['content'] as String;
-        
-        // Remove reasoning if present (R1 models often include <think> tags)
-        final cleanContent = content.replaceAll(RegExp(r'<think>[\s\S]*?</think>'), '').trim();
-        
-        _history.add({'role': 'assistant', 'content': cleanContent});
-        return cleanContent;
-      } else {
-        debugPrint('OpenRouter Error: ${response.statusCode} - ${response.body}');
-        return 'Gita lagi agak linglung nih, kayaknya sinyalnya kurang oke. Coba lagi bentar ya? 🙏';
-      }
-    } catch (e) {
-      debugPrint('Chat Error: $e');
-      return 'Duh, kayaknya ada yang salah. Coba tanya lagi ya? 🥺';
-    }
-  }
-
-  Future<String> generateQuote(String journalText) async {
-    final prompt = '''
-Berdasarkan cerita user hari ini: "$journalText"
-Berikan satu kalimat inspirasi atau penyemangat yang sangat singkat (maksimal 15 kata).
-Gunakan gaya bahasa Gita (hangat, natural, layaknya sahabat).
-Langsung berikan kutipannya saja tanpa tambahan kata lain.
-''';
-
-    try {
-      final response = await http.post(
-        Uri.parse(_baseUrl),
+        Uri.parse(AIConfig.baseUrl),
         headers: {
           'Authorization': 'Bearer ${Secrets.openRouterKey}',
           'Content-Type': 'application/json',
           'HTTP-Referer': 'https://github.com/zidnae/gita',
         },
         body: jsonEncode({
-          'model': _model,
-          'messages': [
-            {'role': 'system', 'content': _systemInstructions},
-            {'role': 'user', 'content': prompt},
-          ],
+          'model': AIConfig.modelChat,
+          'messages': messages,
+          'temperature': temp,
+          'max_tokens': maxTokens,
         }),
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final content = data['choices'][0]['message']['content'] as String;
-        return content.replaceAll(RegExp(r'<think>[\s\S]*?</think>'), '').replaceAll('"', '').trim();
+        return (data['choices'][0]['message']['content'] as String).trim();
+      } else {
+        debugPrint('OpenRouter Error: ${response.statusCode} - ${response.body}');
+        return '';
       }
     } catch (e) {
-      debugPrint('Quote Generation Error: $e');
+      debugPrint('API Request Error: $e');
+      return '';
     }
-    return "Tetap semangat ya, kamu sudah melakukan yang terbaik hari ini! ✨";
+  }
+
+  Future<String> sendMessage(String message) async {
+    _history.add({'role': 'user', 'content': message});
+
+    final response = await _postRequest(_history);
+    
+    if (response.isNotEmpty) {
+      _history.add({'role': 'assistant', 'content': response});
+      return response;
+    }
+    
+    return 'Duh, kayaknya sinyal Gita lagi gak stabil deh. Coba chat lagi ya? 🙏';
+  }
+
+  Future<String> generateQuote(String journalText) async {
+    final prompt = '''
+User baru aja nulis jurnal ini: "$journalText"
+Sebagai Gita (sahabatnya), kasih 1 kalimat semangat yang "dalam" tapi singkat (max 12 kata).
+Bahasa santai, akrab, dan relevan sama isi jurnalnya.
+Langsung kasih quote-nya aja, jangan pake pembuka.
+''';
+
+    final response = await _postRequest(
+      [
+        {'role': 'system', 'content': _systemInstructions},
+        {'role': 'user', 'content': prompt},
+      ],
+      temp: AIConfig.temperatureInsight,
+      maxTokens: AIConfig.maxTokensInsight,
+    );
+
+    return response.isNotEmpty 
+        ? response.replaceAll('"', '') 
+        : "Apapun yang kamu rasain sekarang, aku bangga kamu sudah jujur sama dirimu sendiri. ✨";
   }
 
   Future<String> generateWeeklyReflection(List<String> journals) async {
@@ -102,40 +99,26 @@ Langsung berikan kutipannya saja tanpa tambahan kata lain.
 
     final journalsCombined = journals.map((j) => "- $j").join('\n');
     final prompt = '''
-Berikut adalah ringkasan jurnal user selama seminggu terakhir:
+Summary jurnal seminggu ini:
 $journalsCombined
 
-Berdasarkan tulisan tersebut, berikan satu refleksi singkat (maksimal 20 kata) tentang "vibe" atau suasana hati user minggu ini. 
-Gunakan gaya bahasa Gita (sahabat yang sangat pengertian).
-Langsung berikan refleksinya saja.
+Kasih 1 feedback/refleksi singkat (max 18 kata) yang kerasa "kena" di hati tapi tetep santai. 
+Gambarkan "vibe" perasaan user minggu ini.
+Langsung jawab refleksinya aja.
 ''';
 
-    try {
-      final response = await http.post(
-        Uri.parse(_baseUrl),
-        headers: {
-          'Authorization': 'Bearer ${Secrets.openRouterKey}',
-          'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://github.com/zidnae/gita',
-        },
-        body: jsonEncode({
-          'model': _model,
-          'messages': [
-            {'role': 'system', 'content': _systemInstructions},
-            {'role': 'user', 'content': prompt},
-          ],
-        }),
-      );
+    final response = await _postRequest(
+      [
+        {'role': 'system', 'content': _systemInstructions},
+        {'role': 'user', 'content': prompt},
+      ],
+      temp: AIConfig.temperatureInsight,
+      maxTokens: AIConfig.maxTokensInsight,
+    );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final content = data['choices'][0]['message']['content'] as String;
-        return content.replaceAll(RegExp(r'<think>[\s\S]*?</think>'), '').replaceAll('"', '').trim();
-      }
-    } catch (e) {
-      debugPrint('Weekly Reflection Error: $e');
-    }
-    return "Minggu yang luar biasa! Kamu sudah berjuang dengan sangat hebat hari ini. ❤️";
+    return response.isNotEmpty 
+        ? response.replaceAll('"', '') 
+        : "Minggu ini penuh warna ya! Apapun itu, kamu sudah hebat banget sudah melaluinya. ❤️";
   }
 
   void resetChat() {
@@ -143,3 +126,4 @@ Langsung berikan refleksinya saja.
     _history.add({'role': 'system', 'content': _systemInstructions});
   }
 }
+
