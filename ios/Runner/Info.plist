@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Gita butuh akses galeri buat ganti foto profil kamu. ✨</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Gita butuh akses kamera buat ambil foto profil kamu. ✨</string>
 </dict>
 </plist>
