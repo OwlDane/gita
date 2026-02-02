@@ -42,6 +42,8 @@ class GreetingHeader extends ConsumerWidget {
                         ? Image.file(
                             File(profile.imagePath!),
                             fit: BoxFit.cover,
+                            cacheWidth: 150,
+                            cacheHeight: 150,
                           )
                         : const Center(
                             child: Text(

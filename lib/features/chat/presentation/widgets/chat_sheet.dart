@@ -38,11 +38,12 @@ class _ChatSheetState extends ConsumerState<ChatSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final chatState = ref.watch(chatProvider);
+    final messages = ref.watch(chatProvider.select((s) => s.messages));
+    final isLoading = ref.watch(chatProvider.select((s) => s.isLoading));
     final chatNotifier = ref.read(chatProvider.notifier);
 
     return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.85,
         decoration: BoxDecoration(
@@ -111,23 +112,23 @@ class _ChatSheetState extends ConsumerState<ChatSheet> {
             
             // Chat List
             Expanded(
-              child: chatState.messages.isEmpty
+              child: messages.isEmpty
                   ? _buildEmptyState()
                   : ListView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                      itemCount: chatState.messages.length,
+                      itemCount: messages.length,
                       itemBuilder: (context, index) {
-                        final message = chatState.messages[index];
+                        final message = messages[index];
                         return _ChatMessageBubble(message: message);
                       },
                     ),
             ),
             
-            if (chatState.isLoading)
+            if (isLoading)
               const Padding(
                 padding: EdgeInsets.only(top: 8, bottom: 16),
-                child: _TypingIndicator(),
+                child: RepaintBoundary(child: _TypingIndicator()),
               ),
 
             // Input

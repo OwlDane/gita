@@ -59,27 +59,31 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
       body: Stack(
         children: [
           // Background Decorative Blobs
-          Positioned(
-            top: -100,
-            right: -50,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primary.withValues(alpha: 0.05),
+          RepaintBoundary(
+            child: Positioned(
+              top: -100,
+              right: -50,
+              child: Container(
+                width: 300,
+                height: 300,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primary.withValues(alpha: 0.05),
+                ),
               ),
             ),
           ),
-          Positioned(
-            bottom: 200,
-            left: -100,
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.moodSedih.withValues(alpha: 0.03),
+          RepaintBoundary(
+            child: Positioned(
+              bottom: 200,
+              left: -100,
+              child: Container(
+                width: 250,
+                height: 250,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.moodSedih.withValues(alpha: 0.03),
+                ),
               ),
             ),
           ),
