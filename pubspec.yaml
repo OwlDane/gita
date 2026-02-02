@@ -43,6 +43,7 @@ dependencies:
   flutter_hooks: ^0.20.4
   table_calendar: ^3.2.0
   http: ^1.1.0
+  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:
