@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -28,9 +29,16 @@ class NotificationService {
       requestSoundPermission: true,
     );
 
-    const initSettings = InitializationSettings(
+    // Linux settings
+    final linuxSettings = LinuxInitializationSettings(
+      defaultActionName: 'Open',
+      defaultIcon: AssetsLinuxIcon('assets/image/logo_gita.png'),
+    );
+
+    final initSettings = InitializationSettings(
       android: androidSettings,
       iOS: iosSettings,
+      linux: linuxSettings,
     );
 
     await _notifications.initialize(
@@ -47,6 +55,8 @@ class NotificationService {
   }
 
   Future<bool> requestPermissions() async {
+    if (Platform.isLinux) return true;
+    
     if (await Permission.notification.isGranted) {
       return true;
     }
@@ -55,10 +65,9 @@ class NotificationService {
     return status.isGranted;
   }
 
-  Future<void> scheduleDailyJournalReminder({
-    int hour = 20, // 8 PM default
-    int minute = 0,
-  }) async {
+  Future<void> scheduleDailyJournalReminder({int hour = 20, int minute = 0}) async {
+    if (Platform.isLinux) return;
+    
     await _notifications.zonedSchedule(
       0, // Notification ID
       'Waktunya Journaling! 📝',
@@ -93,6 +102,7 @@ class NotificationService {
     required int minute,
     required List<int> daysOfWeek,
   }) async {
+    if (Platform.isLinux) return;
     // Schedule for each day of the week
     for (final day in daysOfWeek) {
       await _notifications.zonedSchedule(
@@ -128,7 +138,9 @@ class NotificationService {
   }
 
   Future<void> cancelHabitReminder(int habitId, List<int> daysOfWeek) async {
-    for (final day in daysOfWeek) {
+    if (Platform.isLinux) return;
+
+    for (var day in daysOfWeek) {
       await _notifications.cancel(habitId * 10 + day);
     }
   }

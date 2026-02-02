@@ -59,10 +59,10 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
       body: Stack(
         children: [
           // Background Decorative Blobs
-          RepaintBoundary(
-            child: Positioned(
-              top: -100,
-              right: -50,
+          Positioned(
+            top: -100,
+            right: -50,
+            child: RepaintBoundary(
               child: Container(
                 width: 300,
                 height: 300,
@@ -73,10 +73,10 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
               ),
             ),
           ),
-          RepaintBoundary(
-            child: Positioned(
-              bottom: 200,
-              left: -100,
+          Positioned(
+            bottom: 200,
+            left: -100,
+            child: RepaintBoundary(
               child: Container(
                 width: 250,
                 height: 250,

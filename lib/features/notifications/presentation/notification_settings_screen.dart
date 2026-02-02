@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/core/theme/app_colors.dart';
@@ -241,6 +242,14 @@ class _PermissionStatusCardState extends ConsumerState<_PermissionStatusCard> {
   }
 
   Future<void> _checkPermission() async {
+    if (Platform.isLinux) {
+      setState(() {
+        _isGranted = true;
+        _isLoading = false;
+      });
+      return;
+    }
+    
     final status = await Permission.notification.status;
     setState(() {
       _isGranted = status.isGranted;
@@ -249,6 +258,8 @@ class _PermissionStatusCardState extends ConsumerState<_PermissionStatusCard> {
   }
 
   Future<void> _requestPermission() async {
+    if (Platform.isLinux) return;
+    
     final status = await Permission.notification.request();
     setState(() {
       _isGranted = status.isGranted;
