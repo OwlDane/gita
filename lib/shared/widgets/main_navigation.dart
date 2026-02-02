@@ -55,8 +55,8 @@ class MainNavigation extends ConsumerWidget {
                 type: BottomNavigationBarType.fixed,
                 items: const [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.grid_view_rounded, size: 24),
-                    activeIcon: Icon(Icons.grid_view_rounded, size: 24),
+                    icon: Icon(Icons.edit_note_rounded, size: 28),
+                    activeIcon: Icon(Icons.edit_note_rounded, size: 28),
                     label: 'Today',
                   ),
                   BottomNavigationBarItem(
@@ -65,13 +65,13 @@ class MainNavigation extends ConsumerWidget {
                     label: 'Habits',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.calendar_today_rounded, size: 22),
-                    activeIcon: Icon(Icons.calendar_today_rounded, size: 22),
+                    icon: Icon(Icons.auto_stories_outlined, size: 24),
+                    activeIcon: Icon(Icons.auto_stories_rounded, size: 24),
                     label: 'History',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.analytics_outlined, size: 24),
-                    activeIcon: Icon(Icons.analytics_rounded, size: 24),
+                    icon: Icon(Icons.insights_rounded, size: 24),
+                    activeIcon: Icon(Icons.insights_rounded, size: 24),
                     label: 'Insights',
                   ),
                 ],

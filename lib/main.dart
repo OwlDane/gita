@@ -9,6 +9,7 @@ import 'package:gita/features/today/data/mood_entry.dart';
 import 'package:gita/features/habits/data/habit.dart';
 import 'package:gita/shared/widgets/splash_screen.dart';
 import 'package:gita/features/habits/data/habit_repository.dart';
+import 'package:gita/features/profile/data/user_profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,11 +28,13 @@ void main() async {
   Hive.registerAdapter(HabitStatusAdapter());
   Hive.registerAdapter(HabitAdapter());
   Hive.registerAdapter(HabitLogAdapter());
+  Hive.registerAdapter(UserProfileAdapter());
   
   // Open Box
   await Hive.openBox<MoodEntry>('mood_entries');
   await Hive.openBox<Habit>(HabitRepository.habitBoxName);
   await Hive.openBox<HabitLog>(HabitRepository.logBoxName);
+  await Hive.openBox<UserProfile>('user_profile');
 
   runApp(
     const ProviderScope(
