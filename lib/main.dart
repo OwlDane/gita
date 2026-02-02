@@ -22,13 +22,13 @@ void main() async {
   // Initialize Hive
   await Hive.initFlutter();
   
-  // Register Adapters
-  Hive.registerAdapter(MoodTypeAdapter());
-  Hive.registerAdapter(MoodEntryAdapter());
-  Hive.registerAdapter(HabitStatusAdapter());
-  Hive.registerAdapter(HabitAdapter());
-  Hive.registerAdapter(HabitLogAdapter());
-  Hive.registerAdapter(UserProfileAdapter());
+  // Register Adapters with safety checks
+  if (!Hive.isAdapterRegistered(0)) Hive.registerAdapter(MoodTypeAdapter());
+  if (!Hive.isAdapterRegistered(1)) Hive.registerAdapter(MoodEntryAdapter());
+  if (!Hive.isAdapterRegistered(2)) Hive.registerAdapter(HabitStatusAdapter());
+  if (!Hive.isAdapterRegistered(3)) Hive.registerAdapter(HabitAdapter()); 
+  if (!Hive.isAdapterRegistered(4)) Hive.registerAdapter(HabitLogAdapter());
+  if (!Hive.isAdapterRegistered(6)) Hive.registerAdapter(UserProfileAdapter());
   
   // Open Box
   await Hive.openBox<MoodEntry>('mood_entries');
