@@ -10,6 +10,8 @@ import 'package:gita/features/habits/data/habit.dart';
 import 'package:gita/shared/widgets/splash_screen.dart';
 import 'package:gita/features/habits/data/habit_repository.dart';
 import 'package:gita/features/profile/data/user_profile.dart';
+import 'package:gita/features/notifications/data/notification_settings.dart';
+import 'package:gita/core/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,12 +31,28 @@ void main() async {
   if (!Hive.isAdapterRegistered(3)) Hive.registerAdapter(HabitAdapter()); 
   if (!Hive.isAdapterRegistered(4)) Hive.registerAdapter(HabitLogAdapter());
   if (!Hive.isAdapterRegistered(6)) Hive.registerAdapter(UserProfileAdapter());
+  if (!Hive.isAdapterRegistered(7)) Hive.registerAdapter(NotificationSettingsAdapter());
   
   // Open Box
   await Hive.openBox<MoodEntry>('mood_entries');
   await Hive.openBox<Habit>(HabitRepository.habitBoxName);
   await Hive.openBox<HabitLog>(HabitRepository.logBoxName);
   await Hive.openBox<UserProfile>('user_profile');
+  await Hive.openBox<NotificationSettings>('notification_settings');
+
+  // Initialize notification service
+  final notificationService = NotificationService();
+  await notificationService.initialize();
+  
+  // Request notification permissions
+  await notificationService.requestPermissions();
+  
+  // Schedule default daily reminder if not already configured
+  final notifBox = Hive.box<NotificationSettings>('notification_settings');
+  final settings = notifBox.get('settings');
+  if (settings == null || settings.dailyReminderEnabled) {
+    await notificationService.scheduleDailyJournalReminder();
+  }
 
   runApp(
     const ProviderScope(

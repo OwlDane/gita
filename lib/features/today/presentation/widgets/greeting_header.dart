@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gita/core/theme/app_colors.dart';
 import 'package:gita/features/profile/presentation/profile_provider.dart';
 import 'package:gita/features/profile/presentation/profile_screen.dart';
+import 'package:gita/features/notifications/presentation/notification_settings_screen.dart';
 
 class GreetingHeader extends ConsumerWidget {
   const GreetingHeader({super.key});
@@ -72,17 +73,27 @@ class GreetingHeader extends ConsumerWidget {
               ),
             ],
           ),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.divider, width: 1),
-            ),
-            child: const Icon(
-              Icons.notifications_none_rounded,
-              color: AppColors.textMain,
-              size: 20,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotificationSettingsScreen(),
+                ),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.divider, width: 1),
+              ),
+              child: const Icon(
+                Icons.notifications_none_rounded,
+                color: AppColors.textMain,
+                size: 20,
+              ),
             ),
           ),
         ],

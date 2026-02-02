@@ -1,35 +1,41 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'app_settings.dart';
+part of 'notification_settings.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class AppSettingsAdapter extends TypeAdapter<AppSettings> {
+class NotificationSettingsAdapter extends TypeAdapter<NotificationSettings> {
   @override
   final int typeId = 7;
 
   @override
-  AppSettings read(BinaryReader reader) {
+  NotificationSettings read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return AppSettings(
-      isFirstLaunch: fields[0] as bool,
-      lastReflectionDate: fields[1] as DateTime?,
+    return NotificationSettings(
+      dailyReminderEnabled: fields[0] as bool,
+      reminderHour: fields[1] as int,
+      reminderMinute: fields[2] as int,
+      habitRemindersEnabled: fields[3] as bool,
     );
   }
 
   @override
-  void write(BinaryWriter writer, AppSettings obj) {
+  void write(BinaryWriter writer, NotificationSettings obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.isFirstLaunch)
+      ..write(obj.dailyReminderEnabled)
       ..writeByte(1)
-      ..write(obj.lastReflectionDate);
+      ..write(obj.reminderHour)
+      ..writeByte(2)
+      ..write(obj.reminderMinute)
+      ..writeByte(3)
+      ..write(obj.habitRemindersEnabled);
   }
 
   @override
@@ -38,7 +44,7 @@ class AppSettingsAdapter extends TypeAdapter<AppSettings> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AppSettingsAdapter &&
+      other is NotificationSettingsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

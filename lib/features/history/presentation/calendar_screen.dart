@@ -126,19 +126,19 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: 12,
-                    height: 12,
+                    width: 16,
+                    height: 16,
                     decoration: BoxDecoration(
                       color: _getMoodColor(mood),
                       shape: BoxShape.circle,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Image.asset(_getMoodIcon(mood), width: 16, height: 16),
-                  const SizedBox(width: 4),
+                  Image.asset(_getMoodIcon(mood), width: 24, height: 24),
+                  const SizedBox(width: 6),
                   Text(
                     _getMoodLabel(mood),
-                    style: const TextStyle(fontSize: 12),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                 ],
               );
