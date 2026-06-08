@@ -5,6 +5,7 @@ GITA is a minimalist, mobile-first mood tracking and journaling application desi
 ## Features
 
 - **Mood Tracking**: Log your daily emotions with custom sticker-style icons.
+- **Budget Tracking**: Track your daily income and outcome
 - **Journaling**: Securely record your daily stories and thoughts.
 - **Monthly Calendar**: Visualize your emotional trends over time with a comprehensive grid view.
 - **Wawasan (Insights)**: Track your writing streaks and mood distribution.
